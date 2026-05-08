@@ -107,7 +107,7 @@
             let usrVec = null;
             let bestIdx = null;
             let simScores = null;
-            let navStack = []; // 用于详情页返回导航
+            var navStack = [];
 
             var homePage = document.getElementById('homePage');
             var detailPage = document.getElementById('detailPage');
@@ -226,8 +226,8 @@
                     magB = 0;
                 for (let i = 0; i < vecA.length; i++) {
                     dot += vecA[i] * vecB[i];
-                    magA += vecA[i] ** 2;
-                    magB += vecB[i] ** 2;
+                    magA += Math.pow(vecA[i], 2);
+                    magB += Math.pow(vecB[i], 2);
                 }
                 magA = Math.sqrt(magA);
                 magB = Math.sqrt(magB);
@@ -249,8 +249,9 @@
                     return null;
                 }
                 const userVec = [culture, eco, leisure, medical];
-                const sims = modeFeatures.map(function(feat) { return cosineSim(userVec, feat); })
-                const bestIdx = sims.indexOf(Math.max(...sims));
+                var sims = modeFeatures.map(function(feat) { return cosineSim(userVec, feat); });
+                var maxSim = Math.max.apply(null, sims);
+                var bestIdx = sims.indexOf(maxSim);
                 return { userVec, sims, bestIdx };
             }
 
@@ -281,19 +282,21 @@
                     alert('暂无计算结果，请先完成数据化选择。');
                     return;
                 }
-                const rows = [
-                    ['康养模式', '余弦相似度'],
-                    ...modeNames.map(function(name, i) { return [name, simScores[i].toFixed(4)]),
-                    [],
-                    ['推荐模式', modeNames[bestIdx]],
-                    ['用户文化兴趣', usrVec[0]],
-                    ['用户生态兴趣', usrVec[1]],
-                    ['用户休闲兴趣', usrVec[2]],
-                    ['用户医疗兴趣', usrVec[3]]
+                var rows = [
+                    ['康养模式', '余弦相似度']
                 ];
-                const ws = XLSX.utils.aoa_to_sheet(rows);
+                for (var i = 0; i < modeNames.length; i++) {
+                    rows.push([modeNames[i], simScores[i].toFixed(4)]);
+                }
+                rows.push([]);
+                rows.push(['推荐模式', modeNames[bestIdx]]);
+                rows.push(['用户文化兴趣', usrVec[0]]);
+                rows.push(['用户生态兴趣', usrVec[1]]);
+                rows.push(['用户休闲兴趣', usrVec[2]]);
+                rows.push(['用户医疗兴趣', usrVec[3]]);
+                var ws = XLSX.utils.aoa_to_sheet(rows);
                 ws['!cols'] = [{ wch: 20 }, { wch: 18 }];
-                const wb = XLSX.utils.book_new();
+                var wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, '康养模式推荐');
                 XLSX.writeFile(wb, '康养模式匹配结果.xlsx');
             }
@@ -793,7 +796,7 @@
                 aiChatBody.appendChild(msgDiv);
                 aiChatBody.scrollTop = aiChatBody.scrollHeight;
                 if (type === 'assistant') {
-                    lastAiMsg = text.replace(/<[^>]*>/g, ''); // 去除HTML标签
+                    lastAiMsg = text.replace(/<[^>]*>/g, '');
                 }
             }
 
@@ -814,11 +817,11 @@
                 } else if (q.includes('怎么') && (q.includes('用') || q.includes('使用') || q.includes('操作'))) {
                     response = `
                 <strong>[帮助] 平台使用指南：</strong><br>
-                1. 点击主页 <b>"[数据] 康养模式数据化选择"</b> 进入计算页面。<br>
-                2. 输入您对文化、生态、休闲、医疗四方面的兴趣值（0-10分）。<br>
-                3. 点击 <b>"[计算] 快速计算"</b>，系统将智能匹配最适合您的康养模式。<br>
-                4. 点击 <b>"[散点] 进入可视化分析"</b> 查看图表对比。<br>
-                5. 在可视化页面选择折线图、饼状图或散点图查看详细对比。<br>
+                1️⃣ 点击主页 <b>"[数据] 康养模式数据化选择"</b> 进入计算页面。<br>
+                2️⃣ 输入您对文化、生态、休闲、医疗四方面的兴趣值（0-10分）。<br>
+                3️⃣ 点击 <b>"⚡ 快速计算"</b>，系统将智能匹配最适合您的康养模式。<br>
+                4️⃣ 点击 <b>"[散点] 进入可视化分析"</b> 查看图表对比。<br>
+                5️⃣ 在可视化页面选择折线图、饼状图或散点图查看详细对比。<br>
                 [提示] 也可以点击主页的 <b>"[养生] 养生方式"</b> 浏览四种模式的图文介绍和消费档次！
               `;
                 } else if (q.includes('导航') || q.includes('找到') || q.includes('界面') || q.includes('去哪')) {
