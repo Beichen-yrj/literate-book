@@ -1,14 +1,14 @@
 ﻿        (function() {
 
-            const modeNames = ["文化+健康养生", "生态+健康养生", "休闲+健康养生", "医疗+健康养生"];
-            const modeFeatures = [
+            var modeNames = ["文化+健康养生", "生态+健康养生", "休闲+健康养生", "医疗+健康养生"];
+            var modeFeatures = [
                 [9, 1, 0, 2],
                 [2, 8, 1, 1],
                 [1, 2, 9, 1],
                 [1, 1, 1, 9]
             ];
 
-            const modeDetail = {
+            var modeDetail = {
                 0: {
                     who: "文化探寻者",
                     reason: "您对传统文化、历史遗产与民俗风情具有浓厚兴趣，追求旅途中的精神滋养。文化+模式精准匹配您的文化求知需求。",
@@ -104,52 +104,52 @@
                 }
             };
 
-            let currentUserVector = null;
-            let currentBestModeIndex = null;
-            let currentSimilarities = null;
-            let detailNavigationStack = []; // 用于详情页返回导航
+            let usrVec = null;
+            let bestIdx = null;
+            let simScores = null;
+            let navStack = []; // 用于详情页返回导航
 
-            const homePage = document.getElementById('homePage');
-            const detailPage = document.getElementById('detailPage');
-            const analysisPage = document.getElementById('analysisPage');
-            const detailContent = document.getElementById('detailContent');
-            const backFromDetail = document.getElementById('backFromDetail');
-            const viewA = document.getElementById('viewA');
-            const viewB = document.getElementById('viewB');
-            const calcResultDisplay = document.getElementById('calcResultDisplay');
-            const gotoVisualBtn = document.getElementById('gotoVisualBtn');
-            const exportExcelFromCalcBtn = document.getElementById('exportExcelFromCalcBtn');
-            const chartSelectionArea = document.getElementById('chartSelectionArea');
-            const chartDisplayArea = document.getElementById('chartDisplayArea');
-            let chartInstance = null;
+            var homePage = document.getElementById('homePage');
+            var detailPage = document.getElementById('detailPage');
+            var analysisPage = document.getElementById('analysisPage');
+            var detailContent = document.getElementById('detailContent');
+            var backFromDetail = document.getElementById('backFromDetail');
+            var viewA = document.getElementById('viewA');
+            var viewB = document.getElementById('viewB');
+            const calcDisplay = document.getElementById('calcDisplay');
+            var gotoVisualBtn = document.getElementById('gotoVisualBtn');
+            var excelBtn = document.getElementById('excelBtn');
+            var chartSelArea = document.getElementById('chartSelArea');
+            var chartShowArea = document.getElementById('chartShowArea');
+            let myChart = null;
 
-            const aiAvatarBtn = document.getElementById('aiAvatarBtn');
-            const aiChatPanel = document.getElementById('aiChatPanel');
-            const aiChatClose = document.getElementById('aiChatClose');
-            const aiChatBody = document.getElementById('aiChatBody');
-            const aiChatInput = document.getElementById('aiChatInput');
-            const aiSendBtn = document.getElementById('aiSendBtn');
-            const aiSpeakLastBtn = document.getElementById('aiSpeakLastBtn');
-            const aiBubble = document.getElementById('aiBubble');
-            const aiQuickBtns = document.getElementById('aiQuickBtns');
-            let lastAssistantMessage = '';
-            let isSpeaking = false;
-            let cachedVoices = [];
-            let currentSpeechMode = null;
-            let currentAudioElement = null;
-            var isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+            var aiAvatarBtn = document.getElementById('aiAvatarBtn');
+            var aiChatPanel = document.getElementById('aiChatPanel');
+            var aiChatClose = document.getElementById('aiChatClose');
+            var aiChatBody = document.getElementById('aiChatBody');
+            var aiChatInput = document.getElementById('aiChatInput');
+            var aiSendBtn = document.getElementById('aiSendBtn');
+            var aiSpeakLastBtn = document.getElementById('aiSpeakLastBtn');
+            var aiBubble = document.getElementById('aiBubble');
+            var aiQuickBtns = document.getElementById('aiQuickBtns');
+            let lastAiMsg = '';
+            let speaking = false;
+            let voiceList = [];
+            let speechMode = null;
+            let audioEl = null;
+            var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
                 (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
             function loadVoices() {
                 if (!('speechSynthesis' in window)) return;
-                cachedVoices = window.speechSynthesis.getVoices();
+                voiceList = window.speechSynthesis.getVoices();
             }
 
             function getZhVoice() {
-                if (cachedVoices.length === 0) loadVoices();
-                return cachedVoices.find(v => v.lang === 'zh-CN') ||
-                       cachedVoices.find(v => v.lang.startsWith('zh-CN')) ||
-                       cachedVoices.find(v => v.lang.startsWith('zh')) ||
+                if (voiceList.length === 0) loadVoices();
+                return voiceList.find(function(v) { return v.lang === 'zh-CN'; }) ||
+                       voiceList.find(function(v) { return v.lang.startsWith('zh-CN'); }) ||
+                       voiceList.find(function(v) { return v.lang.startsWith('zh'); }) ||
                        null;
             }
 
@@ -158,16 +158,16 @@
                 detailPage.classList.remove('active');
                 analysisPage.classList.remove('active');
                 document.getElementById(pageId).classList.add('active');
-                if (chartInstance) {
-                    chartInstance.destroy();
-                    chartInstance = null;
+                if (myChart) {
+                    myChart.destroy();
+                    myChart = null;
                 }
 
             }
 
             function showDetail(title, contentHtml, pushToStack = true, stackKey = null) {
                 if (pushToStack && stackKey) {
-                    detailNavigationStack.push(stackKey);
+                    navStack.push(stackKey);
                 }
                 detailContent.innerHTML =
                     `<div class="detail-title">${title}</div><div class="detail-text">${contentHtml}</div>`;
@@ -176,7 +176,7 @@
             }
 
             function updateBackButtonVisibility() {
-                if (detailNavigationStack.length > 1) {
+                if (navStack.length > 1) {
                     backFromDetail.textContent = '↩ 返回上一页';
                 } else {
                     backFromDetail.textContent = '↩ 返回主页';
@@ -184,16 +184,16 @@
             }
 
             function popDetailStack() {
-                if (detailNavigationStack.length > 1) {
-                    detailNavigationStack.pop();
-                    return detailNavigationStack[detailNavigationStack.length - 1];
+                if (navStack.length > 1) {
+                    navStack.pop();
+                    return navStack[navStack.length - 1];
                 }
                 return null;
             }
 
             function renderPriceTiers(tiers) {
                 let html = '<div class="price-tiers">';
-                tiers.forEach(t => {
+                tiers.forEach(function(t) {
                     html += `
                 <div class="tier-card">
                   <span class="tier-label ${t.tierClass}">${t.label}</span>
@@ -207,7 +207,7 @@
 
             function renderImageGallery(images) {
                 let html = '<div class="image-gallery">';
-                images.forEach(img => {
+                images.forEach(function(img) {
                     html +=
                         `
                 ${img.note || ''}
@@ -244,12 +244,12 @@
                     alert('请填写所有兴趣值（0-10分）');
                     return null;
                 }
-                if ([culture, eco, leisure, medical].some(v => v < 0 || v > 10)) {
+                if ([culture, eco, leisure, medical].some(function(v) { return v < 0 || v > 10; })) {
                     alert('每项兴趣值需在0到10之间');
                     return null;
                 }
                 const userVec = [culture, eco, leisure, medical];
-                const sims = modeFeatures.map(feat => cosineSim(userVec, feat));
+                const sims = modeFeatures.map(function(feat) { return cosineSim(userVec, feat); })
                 const bestIdx = sims.indexOf(Math.max(...sims));
                 return { userVec, sims, bestIdx };
             }
@@ -258,7 +258,7 @@
                 const { sims, bestIdx } = result;
                 const detail = modeDetail[bestIdx];
                 let html = `<strong>📐 余弦相似度计算结果：</strong><br>`;
-                modeNames.forEach((name, i) => {
+                modeNames.forEach(function(name, i) {
                     html += `${name}：${sims[i].toFixed(4)}<br>`;
                 });
                 html +=
@@ -267,29 +267,29 @@
                     `<br><br><strong>🎯 推荐理由：</strong>${detail.reason}<br><strong>🎯 ${detail.activities}</strong>`;
                 html += `<br><br><strong>💲 消费档次推荐：</strong>`;
                 html += renderPriceTiers(detail.priceTiers);
-                calcResultDisplay.innerHTML = html;
-                calcResultDisplay.style.display = 'block';
+                calcDisplay.innerHTML = html;
+                calcDisplay.style.display = 'block';
                 gotoVisualBtn.style.display = 'inline-block';
-                exportExcelFromCalcBtn.style.display = 'inline-block';
+                excelBtn.style.display = 'inline-block';
 
-                calcResultDisplay.setAttribute('data-recommend-text',
+                calcDisplay.setAttribute('data-recommend-text',
                     `为您推荐${modeNames[bestIdx]}。${detail.reason} ${detail.activities}`);
             }
 
             function exportSimsToExcel() {
-                if (!currentSimilarities || currentBestModeIndex === null) {
+                if (!simScores || bestIdx === null) {
                     alert('暂无计算结果，请先完成数据化选择。');
                     return;
                 }
                 const rows = [
                     ['康养模式', '余弦相似度'],
-                    ...modeNames.map((name, i) => [name, currentSimilarities[i].toFixed(4)]),
+                    ...modeNames.map(function(name, i) { return [name, simScores[i].toFixed(4)]),
                     [],
-                    ['推荐模式', modeNames[currentBestModeIndex]],
-                    ['用户文化兴趣', currentUserVector[0]],
-                    ['用户生态兴趣', currentUserVector[1]],
-                    ['用户休闲兴趣', currentUserVector[2]],
-                    ['用户医疗兴趣', currentUserVector[3]]
+                    ['推荐模式', modeNames[bestIdx]],
+                    ['用户文化兴趣', usrVec[0]],
+                    ['用户生态兴趣', usrVec[1]],
+                    ['用户休闲兴趣', usrVec[2]],
+                    ['用户医疗兴趣', usrVec[3]]
                 ];
                 const ws = XLSX.utils.aoa_to_sheet(rows);
                 ws['!cols'] = [{ wch: 20 }, { wch: 18 }];
@@ -299,7 +299,7 @@
             }
 
             function exportChartToWord() {
-                const canvases = document.querySelectorAll('#chartDisplayArea canvas');
+                const canvases = document.querySelectorAll('#chartShowArea canvas');
                 if (canvases.length === 0) {
                     alert('未找到图表，请先生成可视化图表。');
                     return;
@@ -331,7 +331,7 @@
                     spacing: { before: 200, after: 150 },
                 }));
 
-                canvases.forEach((canvas) => {
+                canvases.forEach(function(canvas) {
                     const tempCanvas = document.createElement('canvas');
                     const scale = 2;
                     tempCanvas.width = canvas.width * scale;
@@ -374,7 +374,7 @@
 
                 if (explanationText) {
                     const lines = explanationText.split('\n');
-                    lines.forEach(line => {
+                    lines.forEach(function(line) {
                         if (line.trim()) {
                             children.push(new Paragraph({
                                 children: [new TextRun({ text: line, size: 22, font: 'SimSun' })],
@@ -392,7 +392,7 @@
 
                 if (summaryText) {
                     const lines = summaryText.split('\n');
-                    lines.forEach(line => {
+                    lines.forEach(function(line) {
                         if (line.trim()) {
                             children.push(new Paragraph({
                                 children: [new TextRun({ text: line, size: 22, font: 'SimSun' })],
@@ -416,7 +416,7 @@
                     }],
                 });
 
-                Packer.toBlob(doc).then(blob => {
+                Packer.toBlob(doc).then(function(blob) {
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
@@ -425,26 +425,26 @@
                     a.click();
                     document.body.removeChild(a);
                     URL.revokeObjectURL(url);
-                }).catch(err => {
+                }).catch(function(err) {
                     alert('导出Word失败: ' + err.message);
                 });
             }
 
-            exportExcelFromCalcBtn.addEventListener('click', exportSimsToExcel);
+            excelBtn.addEventListener('click', exportSimsToExcel);
 
             function resetToChartSelection() {
-                if (chartInstance) {
-                    chartInstance.destroy();
-                    chartInstance = null;
+                if (myChart) {
+                    myChart.destroy();
+                    myChart = null;
                 }
-                chartSelectionArea.style.display = 'block';
-                chartDisplayArea.style.display = 'none';
-                chartDisplayArea.innerHTML = '';
+                chartSelArea.style.display = 'block';
+                chartShowArea.style.display = 'none';
+                chartShowArea.innerHTML = '';
             }
 
             function ensureStandardChartLayout() {
                 if (!document.getElementById('myChart')) {
-                    chartDisplayArea.innerHTML = `
+                    chartShowArea.innerHTML = `
                 <div class="chart-container"><canvas id="myChart"></canvas></div>
                 <div id="chartExplanation" class="result-box" style="margin-top:10px;"></div>
                 <div id="recommendSummaryBox" class="recommend-summary"></div>
@@ -459,7 +459,7 @@
             }
 
             function renderPieLayout() {
-                chartDisplayArea.innerHTML = `
+                chartShowArea.innerHTML = `
               <div style="display:flex; gap:25px; flex-wrap:wrap; justify-content:center;">
                 <div style="flex:1; min-width:260px;"><canvas id="pieUser" height="260"></canvas></div>
                 <div style="flex:1; min-width:260px;"><canvas id="pieMode" height="260"></canvas></div>
@@ -476,22 +476,22 @@
             }
 
             function renderChart(chartType) {
-                if (!currentUserVector || currentBestModeIndex === null) {
+                if (!usrVec || bestIdx === null) {
                     alert('请先完成数据计算');
                     return;
                 }
-                const userVec = currentUserVector;
-                const bestModeIdx = currentBestModeIndex;
+                const userVec = usrVec;
+                const bestModeIdx = bestIdx;
                 const modeVec = modeFeatures[bestModeIdx];
                 const dimLabels = ['文化兴趣', '生态兴趣', '休闲兴趣', '医疗兴趣'];
                 const detail = modeDetail[bestModeIdx];
 
-                if (chartInstance) {
-                    chartInstance.destroy();
-                    chartInstance = null;
+                if (myChart) {
+                    myChart.destroy();
+                    myChart = null;
                 }
-                chartSelectionArea.style.display = 'none';
-                chartDisplayArea.style.display = 'block';
+                chartSelArea.style.display = 'none';
+                chartShowArea.style.display = 'block';
 
                 if (chartType === 'pie') {
                     renderPieLayout();
@@ -531,7 +531,7 @@
                     const canvas = document.getElementById('myChart');
                     const ctx = canvas.getContext('2d');
                     if (chartType === 'line') {
-                        chartInstance = new Chart(ctx, {
+                        myChart = new Chart(ctx, {
                             type: 'line',
                             data: {
                                 labels: dimLabels,
@@ -550,13 +550,13 @@
                         document.getElementById('chartExplanation').innerHTML =
                             `<strong>📉 折线图解读：</strong>绿色实线代表您的兴趣分布，橙色虚线为推荐模式的特征。两者在关键维度上高度重合。`;
                     } else if (chartType === 'scatter') {
-                        chartInstance = new Chart(ctx, {
+                        myChart = new Chart(ctx, {
                             type: 'scatter',
                             data: {
                                 datasets: [
-                                    { label: '您的兴趣点', data: userVec.map((v, i) => ({ x: i, y: v })),
+                                    { label: '您的兴趣点', data: userVec.map(function(v, i) { return { x: i, y: v }; }),
                                         backgroundColor: '#2d6a4f', pointRadius: 10, pointHoverRadius: 13 },
-                                    { label: '推荐模式点', data: modeVec.map((v, i) => ({ x: i, y: v })),
+                                    { label: '推荐模式点', data: modeVec.map(function(v, i) { return { x: i, y: v }; }),
                                         backgroundColor: '#d97c4a', pointRadius: 10, pointHoverRadius: 13, pointStyle: 'triangle' }
                                 ]
                             },
@@ -616,7 +616,7 @@
             }
 
             function speakText(text) {
-                if (isSpeaking) {
+                if (speaking) {
                     stopSpeaking();
                     return;
                 }
@@ -640,25 +640,25 @@
                     utterance.voice = zhVoice;
                 }
                 utterance.onstart = function() {
-                    isSpeaking = true;
-                    currentSpeechMode = 'native';
+                    speaking = true;
+                    speechMode = 'native';
                     updateSpeakBtnState();
                 };
                 utterance.onend = function() {
-                    isSpeaking = false;
-                    currentSpeechMode = null;
+                    speaking = false;
+                    speechMode = null;
                     updateSpeakBtnState();
                 };
                 utterance.onerror = function(e) {
                     if (e.error !== 'canceled') {
                         tryAudioTTS(text);
                     } else {
-                        isSpeaking = false;
-                        currentSpeechMode = null;
+                        speaking = false;
+                        speechMode = null;
                         updateSpeakBtnState();
                     }
                 };
-                if (isIOSDevice) {
+                if (isIOS) {
                     window.speechSynthesis.speak(utterance);
                 } else {
                     setTimeout(function() {
@@ -675,36 +675,36 @@
                     chunks.push(remaining.substring(0, maxLen));
                     remaining = remaining.substring(maxLen);
                 }
-                isSpeaking = true;
-                currentSpeechMode = 'audio';
+                speaking = true;
+                speechMode = 'audio';
                 updateSpeakBtnState();
                 playAudioChunks(chunks, 0, text);
             }
 
             function playAudioChunks(chunks, index, originalText) {
-                if (index >= chunks.length || !isSpeaking) {
-                    isSpeaking = false;
-                    currentSpeechMode = null;
+                if (index >= chunks.length || !speaking) {
+                    speaking = false;
+                    speechMode = null;
                     updateSpeakBtnState();
                     return;
                 }
                 var audio = new Audio();
                 audio.src = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=zh-CN&q=' + encodeURIComponent(chunks[index]);
-                currentAudioElement = audio;
+                audioEl = audio;
                 audio.onended = function() {
                     playAudioChunks(chunks, index + 1, originalText);
                 };
                 audio.onerror = function() {
-                    isSpeaking = false;
-                    currentSpeechMode = null;
-                    currentAudioElement = null;
+                    speaking = false;
+                    speechMode = null;
+                    audioEl = null;
                     updateSpeakBtnState();
                     copyTextFallback(originalText);
                 };
                 audio.play().catch(function() {
-                    isSpeaking = false;
-                    currentSpeechMode = null;
-                    currentAudioElement = null;
+                    speaking = false;
+                    speechMode = null;
+                    audioEl = null;
                     updateSpeakBtnState();
                     copyTextFallback(originalText);
                 });
@@ -739,23 +739,23 @@
             }
 
             function stopSpeaking() {
-                if (currentSpeechMode === 'native' && 'speechSynthesis' in window) {
+                if (speechMode === 'native' && 'speechSynthesis' in window) {
                     window.speechSynthesis.cancel();
                 }
-                if (currentAudioElement) {
-                    currentAudioElement.pause();
-                    currentAudioElement.currentTime = 0;
-                    currentAudioElement = null;
+                if (audioEl) {
+                    audioEl.pause();
+                    audioEl.currentTime = 0;
+                    audioEl = null;
                 }
-                isSpeaking = false;
-                currentSpeechMode = null;
+                speaking = false;
+                speechMode = null;
                 updateSpeakBtnState();
             }
 
             function updateSpeakBtnState() {
                 const btn = document.getElementById('aiSpeakLastBtn');
                 if (btn) {
-                    if (isSpeaking) {
+                    if (speaking) {
                         btn.textContent = '⏹';
                         btn.title = '停止朗读';
                         btn.classList.add('speaking');
@@ -771,15 +771,15 @@
 
                 let textToSpeak = '';
                 const summaryEl = document.getElementById('recommendSummaryBox');
-                const calcDisplay = document.getElementById('calcResultDisplay');
+                const calcDisplay = document.getElementById('calcDisplay');
                 if (summaryEl && summaryEl.getAttribute('data-recommend-text')) {
                     textToSpeak = summaryEl.getAttribute('data-recommend-text');
                 } else if (calcDisplay && calcDisplay.getAttribute('data-recommend-text')) {
                     textToSpeak = calcDisplay.getAttribute('data-recommend-text');
-                } else if (currentBestModeIndex !== null) {
-                    const detail = modeDetail[currentBestModeIndex];
+                } else if (bestIdx !== null) {
+                    const detail = modeDetail[bestIdx];
                     textToSpeak =
-                        `为您推荐${modeNames[currentBestModeIndex]}。适合人群：${detail.who}。${detail.reason} ${detail.activities}`;
+                        `为您推荐${modeNames[bestIdx]}。适合人群：${detail.who}。${detail.reason} ${detail.activities}`;
                 } else {
                     textToSpeak = '暂无推荐结果，请先完成数据化选择。';
                 }
@@ -793,7 +793,7 @@
                 aiChatBody.appendChild(msgDiv);
                 aiChatBody.scrollTop = aiChatBody.scrollHeight;
                 if (type === 'assistant') {
-                    lastAssistantMessage = text.replace(/<[^>]*>/g, ''); // 去除HTML标签
+                    lastAiMsg = text.replace(/<[^>]*>/g, ''); // 去除HTML标签
                 }
             }
 
@@ -833,27 +833,27 @@
                 💬 需要我直接带你跳转吗？告诉我你想去哪个页面！
               `;
                 } else if (q.includes('结果') || q.includes('推荐') || q.includes('数据')) {
-                    if (currentBestModeIndex !== null && currentSimilarities) {
-                        const detail = modeDetail[currentBestModeIndex];
+                    if (bestIdx !== null && simScores) {
+                        const detail = modeDetail[bestIdx];
                         response = `
                   <strong>📊 当前计算结果：</strong><br>
-                  ${modeNames.map((name, i) => `${name}：${currentSimilarities[i].toFixed(4)}`).join('<br>')}<br>
-                  <br>✅ <b>推荐模式：${modeNames[currentBestModeIndex]}</b> (匹配度 ${currentSimilarities[currentBestModeIndex].toFixed(4)})<br>
+                  ${modeNames.map(function(name, i) { return name + '：' + simScores[i].toFixed(4); }).join('<br>')}<br>
+                  <br>✅ <b>推荐模式：${modeNames[bestIdx]}</b> (匹配度 ${simScores[bestIdx].toFixed(4)})<br>
                   <br><strong>🎯 推荐理由：</strong>${detail.reason}<br>
                   <strong>🎯 ${detail.activities}</strong><br>
                   <br><strong>💲 消费档次：</strong><br>
-                  ${detail.priceTiers.map(t => `<b>${t.label}</b>：${t.price} - ${t.detail}`).join('<br>')}
+                  ${detail.priceTiers.map(function(t) { return '<b>' + t.label + '</b>：' + t.price + ' - ' + t.detail; }).join('<br>')}
                 `;
                     } else {
                         response =
                             '⚠️ 暂无计算结果。请先前往 <b>"📊 康养模式数据化选择"</b> 输入您的兴趣值并点击计算。需要我带你去吗？';
                     }
                 } else if (q.includes('朗读') || q.includes('读出') || q.includes('语音') || q.includes('扬声器')) {
-                    if (isSpeaking) {
+                    if (speaking) {
                         stopSpeaking();
                         response = '⏹ 已停止语音朗读。再次点击"朗读推荐"可重新朗读。';
                     } else {
-                        if (currentBestModeIndex === null) {
+                        if (bestIdx === null) {
                             response = '⚠️ 暂无推荐结果，请先完成数据化选择后再使用朗读功能。';
                         } else {
                             speakLastRecommendation();
@@ -865,11 +865,11 @@
                         '🔍 您可以使用聊天面板中的 <b>"放大+"</b> 和 <b>"缩小-"</b> 按钮来调整页面字体大小，也可以点击 <b>"重置"</b> 恢复默认。试试看吧！';
                 } else if (q.includes('消费') || q.includes('价格') || q.includes('费用') || q.includes('档次') || q.includes(
                         '经济')) {
-                    if (currentBestModeIndex !== null) {
-                        const detail = modeDetail[currentBestModeIndex];
+                    if (bestIdx !== null) {
+                        const detail = modeDetail[bestIdx];
                         response =
-                            `<strong>💲 ${modeNames[currentBestModeIndex]} 消费档次：</strong><br>` +
-                            detail.priceTiers.map(t => `<b>${t.label}</b>：${t.price}<br>→ ${t.detail}`).join('<br>');
+                            `<strong>💲 ${modeNames[bestIdx]} 消费档次：</strong><br>` +
+                            detail.priceTiers.map(function(t) { return '<b>' + t.label + '</b>：' + t.price + '<br>→ ' + t.detail; }).join('<br>');
                     } else {
                         response =
                             '💲 四种模式都有ABCD四个消费档次，涵盖经济型到高端型。请先在养生方式中查看各模式详情，或完成数据化选择后查看推荐模式的消费档次。';
@@ -897,7 +897,7 @@
                 if (!query.trim()) return;
                 addChatMessage('user', query);
                 const response = processAIQuery(query);
-                setTimeout(() => {
+                setTimeout(function() {
                     addChatMessage('assistant', response);
                 }, 400);
                 aiChatInput.value = '';
@@ -927,33 +927,33 @@
             }
 
             aiAvatarBtn.addEventListener('click', toggleAIChat);
-            aiChatClose.addEventListener('click', () => {
+            aiChatClose.addEventListener('click', function() {
                 aiChatPanel.classList.remove('open');
                 aiBubble.style.display = 'block';
             });
-            aiSendBtn.addEventListener('click', () => handleAIQuery(aiChatInput.value));
-            aiChatInput.addEventListener('keypress', (e) => {
+            aiSendBtn.addEventListener('click', function() { handleAIQuery(aiChatInput.value); })
+            aiChatInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') handleAIQuery(aiChatInput.value);
             });
-            aiSpeakLastBtn.addEventListener('click', () => {
-                if (isSpeaking) {
+            aiSpeakLastBtn.addEventListener('click', function() {
+                if (speaking) {
                     stopSpeaking();
-                } else if (lastAssistantMessage) {
-                    speakText(lastAssistantMessage);
+                } else if (lastAiMsg) {
+                    speakText(lastAiMsg);
                 } else {
                     speakLastRecommendation();
                 }
             });
 
-            aiQuickBtns.addEventListener('click', (e) => {
+            aiQuickBtns.addEventListener('click', function(e) {
                 if (e.target.classList.contains('ai-quick-btn')) {
                     const q = e.target.getAttribute('data-q');
                     handleAIQuery(q);
                 }
             });
 
-            document.getElementById('aiZoomIn').addEventListener('click', () => zoomPage(0.1));
-            document.getElementById('aiZoomOut').addEventListener('click', () => zoomPage(-0.1));
+            document.getElementById('aiZoomIn').addEventListener('click', function() { zoomPage(0.1); });
+            document.getElementById('aiZoomOut').addEventListener('click', function() { zoomPage(-0.1); });
             document.getElementById('aiZoomReset').addEventListener('click', resetZoom);
 
             if ('speechSynthesis' in window) {
@@ -962,30 +962,30 @@
                     loadVoices();
                 };
                 setInterval(function() {
-                    if (isSpeaking && currentSpeechMode === 'native' && !window.speechSynthesis.speaking) {
-                        isSpeaking = false;
-                        currentSpeechMode = null;
+                    if (speaking && speechMode === 'native' && !window.speechSynthesis.speaking) {
+                        speaking = false;
+                        speechMode = null;
                         updateSpeakBtnState();
                     }
                 }, 1000);
             }
 
-            document.getElementById('btnResearchBg').addEventListener('click', () => {
-                detailNavigationStack = ['research'];
+            document.getElementById('btnResearchBg').addEventListener('click', function() {
+                navStack = ['research'];
                 showDetail('📖 研究背景',
                     `当前，全球人口老龄化进程不断加快，中国作为人口大国，老龄化态势尤为突出，已正式步入中度老龄化社会。截至近年，我国60岁及以上老年人口突破3亿，占总人口比例超五分之一，且老年人口规模持续扩大，高龄化、空巢化、失能化趋势日益明显，传统家庭养老与公共养老服务体系面临严峻压力，养老供需矛盾逐渐凸显。与此同时，国家将积极应对人口老龄化上升为国家战略，陆续出台多项政策扶持银发经济发展，从顶层设计为产业发展指明方向，推动养老服务、健康医疗、适老用品、老年文旅等领域规范化、规模化发展。随着社会经济发展，老年群体消费观念逐步转变，从基础的生存型消费，向健康养生、精神文化、智慧养老等品质型、多元化消费升级，消费潜力持续释放。银发经济不仅是破解养老难题、保障老年群体福祉的重要抓手，更成为新时代扩大内需、培育经济发展新动能的关键领域，蕴含巨大市场空间。在此背景下，深入研究银发经济的发展现状、产业痛点与未来趋势，具有极强的现实意义与实践价值。`,
                     true, 'research');
             });
 
-            document.getElementById('btnModeIntro').addEventListener('click', () => {
-                detailNavigationStack = ['modeIntro'];
+            document.getElementById('btnModeIntro').addEventListener('click', function() {
+                navStack = ['modeIntro'];
                 showDetail('🧭 模式简介',
                     `本文构建文化+、生态+、休闲+、医疗+四类康养旅游模式，并运用K均值聚类+余弦相似度实现用户画像与旅游模式精准匹配。K均值聚类算法以文化体验、自然疗愈、休闲享乐、健康需求为维度，对样本数据迭代聚类，将老年游客划分为自然热衷者、都市逃离者、文化探寻者、活力养护者四类用户画像，实现需求群体精准细分。余弦相似度算法用于量化匹配度，先将用户特征与模式特征转化为四维向量，再通过向量夹角计算相似度，取值范围为[-1,1]，数值越接近1表示匹配度越高。基于算法计算，自然热衷者匹配生态+模式，都市逃离者匹配休闲+模式，文化探寻者匹配文化+模式，活力养护者匹配医疗+模式。该方法以数据驱动实现供需精准对接，有效解决康养旅游同质化、供需错配问题，为老年康养旅游精准服务提供科学支撑。`,
                     true, 'modeIntro');
             });
 
-            document.getElementById('btnHealthStyle').addEventListener('click', () => {
-                detailNavigationStack = ['healthStyle'];
+            document.getElementById('btnHealthStyle').addEventListener('click', function() {
+                navStack = ['healthStyle'];
                 const html = `
             <div class="mode-cards">
               <div class="mode-card" data-mode-index="0">
@@ -1012,8 +1012,8 @@
           `;
                 showDetail('🌿 养生方式总览', html, true, 'healthStyle');
 
-                setTimeout(() => {
-                    document.querySelectorAll('.mode-card[data-mode-index]').forEach(card => {
+                setTimeout(function() {
+                    document.querySelectorAll('.mode-card[data-mode-index]').forEach(function(card) {
                         card.addEventListener('click', function() {
                             const modeIdx = parseInt(this.getAttribute('data-mode-index'));
                             const detail = modeDetail[modeIdx];
@@ -1039,11 +1039,11 @@
                 }, 150);
             });
 
-            backFromDetail.addEventListener('click', () => {
+            backFromDetail.addEventListener('click', function() {
                 const prevKey = popDetailStack();
                 if (prevKey === 'healthStyle') {
 
-                    detailNavigationStack = ['healthStyle'];
+                    navStack = ['healthStyle'];
                     const html = `
                 <div class="mode-cards">
                   <div class="mode-card" data-mode-index="0">
@@ -1072,8 +1072,8 @@
                         `<div class="detail-title">🌿 养生方式总览</div><div class="detail-text">${html}</div>`;
                     updateBackButtonVisibility();
 
-                    setTimeout(() => {
-                        document.querySelectorAll('.mode-card[data-mode-index]').forEach(card => {
+                    setTimeout(function() {
+                        document.querySelectorAll('.mode-card[data-mode-index]').forEach(function(card) {
                             card.addEventListener('click', function() {
                                 const modeIdx = parseInt(this.getAttribute(
                                     'data-mode-index'));
@@ -1097,86 +1097,81 @@
                             });
                         });
                     }, 150);
-                } else if (detailNavigationStack.length === 0 || !prevKey) {
+                } else if (navStack.length === 0 || !prevKey) {
 
-                    detailNavigationStack = [];
+                    navStack = [];
                     showPage('homePage');
                 }
 
-                if (detailNavigationStack.length <= 1 && detailNavigationStack[0] !== 'healthStyle') {
-                    detailNavigationStack = [];
+                if (navStack.length <= 1 && navStack[0] !== 'healthStyle') {
+                    navStack = [];
                     showPage('homePage');
                 }
             });
 
-            document.getElementById('entryA').addEventListener('click', () => {
-                detailNavigationStack = [];
+            document.getElementById('entryA').addEventListener('click', function() {
+                navStack = [];
                 showPage('analysisPage');
                 viewA.style.display = 'block';
                 viewB.style.display = 'none';
                 resetToChartSelection();
             });
-            document.getElementById('entryB').addEventListener('click', () => {
-                if (!currentUserVector || currentBestModeIndex === null) {
+            document.getElementById('entryB').addEventListener('click', function() {
+                if (!usrVec || bestIdx === null) {
                     alert('请先通过"康养模式数据化选择"完成计算。');
-                    detailNavigationStack = [];
+                    navStack = [];
                     showPage('analysisPage');
                     viewA.style.display = 'block';
                     viewB.style.display = 'none';
                     return;
                 }
-                detailNavigationStack = [];
+                navStack = [];
                 showPage('analysisPage');
                 viewA.style.display = 'none';
                 viewB.style.display = 'block';
                 resetToChartSelection();
             });
 
-            document.getElementById('quickCalcBtn').addEventListener('click', () => {
+            document.getElementById('quickCalcBtn').addEventListener('click', function() {
                 const r = performCalculation();
                 if (r) {
-                    currentUserVector = r.userVec;
-                    currentBestModeIndex = r.bestIdx;
-                    currentSimilarities = r.sims;
+                    usrVec = r.userVec;
+                    bestIdx = r.bestIdx;
+                    simScores = r.sims;
                     displayResult(r);
                 }
             });
 
-            gotoVisualBtn.addEventListener('click', () => {
+            gotoVisualBtn.addEventListener('click', function() {
                 viewA.style.display = 'none';
                 viewB.style.display = 'block';
                 resetToChartSelection();
             });
 
-            document.getElementById('backFromA').addEventListener('click', () => {
-                detailNavigationStack = [];
+            document.getElementById('backFromA').addEventListener('click', function() {
+                navStack = [];
                 showPage('homePage');
             });
 
-            chartSelectionArea.addEventListener('click', (e) => {
+            chartSelArea.addEventListener('click', function(e) {
                 if (e.target.classList.contains('chart-type-btn')) {
                     renderChart(e.target.getAttribute('data-chart'));
                 }
             });
 
-            chartDisplayArea.addEventListener('click', (e) => {
+            chartShowArea.addEventListener('click', function(e) {
                 if (e.target.id === 'backToChartSelection') resetToChartSelection();
                 if (e.target.id === 'backToHomeFromB') {
                     resetToChartSelection();
-                    detailNavigationStack = [];
+                    navStack = [];
                     showPage('homePage');
                 }
                 if (e.target.id === 'exportExcelChart') exportSimsToExcel();
                 if (e.target.id === 'exportWordChart') exportChartToWord();
             });
 
-            setTimeout(() => {
+            setTimeout(function() {
 
             }, 8000);
 
-            console.log('✅ 健康养生旅游模式系统已就绪');
-            console.log('🧳 AI助手"小旅"已在右上角待命');
-            console.log('📷 图片路径请在代码中搜索"images/"进行替换');
-            console.log('💲 ABCD消费档次已集成到各模式详情中');
-            console.log('🔊 语音朗读使用Web Speech API，推荐Chrome/Edge浏览器');
-        })();
+                                                                    })();
