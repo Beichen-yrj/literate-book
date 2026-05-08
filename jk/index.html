@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.5">
+    <title>健康养生旅游模式可视化选择 · 石家庄铁道大学</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js">
+    </script>
+    
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js">
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js">
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-decor">
+        <span></span><span></span><span></span>
+    </div>
+
+    
+    <div class="ai-assistant-wrapper" id="aiAssistantWrapper">
+        <div class="ai-bubble" id="aiBubble">💬 不会就来问小旅哦！</div>
+        <div class="ai-avatar-btn" id="aiAvatarBtn" title="点击召唤小旅助手">
+            <div class="ai-leaf"></div>
+            <div class="ai-face">
+                <div class="ai-eye left"></div>
+                <div class="ai-eye right"></div>
+                <div class="ai-blush left"></div>
+                <div class="ai-blush right"></div>
+                <div class="ai-mouth"></div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="ai-chat-panel" id="aiChatPanel">
+        <div class="ai-chat-header">
+            <span class="ai-header-icon">🧳</span> 小旅 · AI助手
+            <button class="ai-chat-close" id="aiChatClose">✕</button>
+        </div>
+        <div class="ai-quick-btns" id="aiQuickBtns">
+            <button class="ai-quick-btn" data-q="介绍模式">📖 介绍模式</button>
+            <button class="ai-quick-btn" data-q="怎么使用">❓ 怎么使用</button>
+            <button class="ai-quick-btn" data-q="帮我导航">🧭 帮我导航</button>
+            <button class="ai-quick-btn" data-q="查看结果">📊 查看结果</button>
+            <button class="ai-quick-btn" data-q="朗读推荐">🔊 朗读推荐</button>
+        </div>
+        <div class="ai-zoom-controls">
+            <span>🔍 页面缩放：</span>
+            <button class="ai-zoom-btn" id="aiZoomIn">放大+</button>
+            <button class="ai-zoom-btn" id="aiZoomOut">缩小-</button>
+            <button class="ai-zoom-btn" id="aiZoomReset">重置</button>
+        </div>
+        <div class="ai-chat-body" id="aiChatBody">
+            <div class="ai-msg assistant">
+                👋 你好呀！我是<strong>小旅</strong>，你的康养旅游智能助手！<br>你可以点击上方快捷按钮，或直接输入问题来问我哦～
+            </div>
+        </div>
+        <div class="ai-chat-footer">
+            <input type="text" id="aiChatInput" placeholder="输入问题，小旅帮你解答...">
+            <button id="aiSendBtn">发送</button>
+            <button class="ai-speak-btn" id="aiSpeakLastBtn" title="朗读最后一条回复">🔊</button>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <div class="university-name">石家庄铁道大学</div>
+
+        
+        <div id="homePage" class="page active">
+            <div class="main-title">健康养生旅游模式可视化选择</div>
+            <div class="small-entries">
+                <button class="entry-btn" id="btnResearchBg">📖 研究背景</button>
+                <button class="entry-btn" id="btnModeIntro">🧭 模式简介</button>
+                <button class="entry-btn" id="btnHealthStyle">🌿 养生方式</button>
+            </div>
+            <div class="main-entries">
+                <div class="main-entry-card entry-a" id="entryA">
+                    <span class="entry-icon">📊</span>
+                    <span class="entry-label">康养模式数据化选择</span>
+                    <span class="entry-desc">输入兴趣偏好，智能匹配模式</span>
+                </div>
+                <div class="main-entry-card entry-b" id="entryB">
+                    <span class="entry-icon">📈</span>
+                    <span class="entry-label">可视化呈现图分析</span>
+                    <span class="entry-desc">多图表对比，精准推荐</span>
+                </div>
+            </div>
+            <div style="font-size:0.9rem; color:#465f3a; margin-top:5px; text-align:center;">
+                点击上方入口开始探索 · 建议先完成数据化选择再查看可视化
+            </div>
+        </div>
+
+        
+        <div id="detailPage" class="page">
+            <div class="detail-container" id="detailContent"></div>
+            <button class="back-btn" id="backFromDetail">↩ 返回上一页</button>
+        </div>
+
+        
+        <div id="analysisPage" class="page">
+            <div class="analysis-layout">
+                
+                <div id="viewA">
+                    <div style="font-size:1.6rem; font-weight:bold; color:#2d4a2c; margin-bottom:10px;">📋 康养模式数据化选择</div>
+                    <div class="input-panel">
+                        <div class="param-group"><label>🎭 文化兴趣</label><input type="number" id="cultureInput" value="8" min="0" max="10" step="0.1" placeholder="0-10"><span class="score-hint">满分10分</span></div>
+                        <div class="param-group"><label>🌳 生态兴趣</label><input type="number" id="ecoInput" value="3" min="0" max="10" step="0.1" placeholder="0-10"><span class="score-hint">满分10分</span></div>
+                        <div class="param-group"><label>⛱️ 休闲兴趣</label><input type="number" id="leisureInput" value="2" min="0" max="10" step="0.1" placeholder="0-10"><span class="score-hint">满分10分</span></div>
+                        <div class="param-group"><label>⚕️ 医疗兴趣</label><input type="number" id="medicalInput" value="5" min="0" max="10" step="0.1" placeholder="0-10"><span class="score-hint">满分10分</span></div>
+                        <button class="calc-btn" id="quickCalcBtn">⚡ 快速计算</button>
+                    </div>
+                    <div id="calcResultDisplay" class="result-box" style="display:none;"></div>
+                    <button id="exportExcelFromCalcBtn" class="btn-export-excel" style="display:none; margin-top:12px;">📥 导出结果为 Excel</button>
+                    <div style="margin-top:15px; display:flex; gap:20px; flex-wrap:wrap;">
+                        <button class="back-btn" id="backFromA">🏠 返回主页</button>
+                        <button id="gotoVisualBtn" style="background:#8aa87d; color:white; padding:12px 28px; border:none; border-radius:30px; font-weight:bold; cursor:pointer; display:none;">✨ 进入可视化分析</button>
+                    </div>
+                </div>
+
+                
+                <div id="viewB" style="display:none; margin-top:20px;">
+                    <div style="font-size:1.5rem; font-weight:bold; color:#2d4a2c;">📊 可视化呈现图分析</div>
+                    <div id="chartSelectionArea">
+                        <p style="margin:10px 0; color:#3b5230; text-align:center;">请选择一种图表类型查看对比：</p>
+                        <div class="chart-selector">
+                            <button class="chart-type-btn" data-chart="line">📉 折线图对比</button>
+                            <button class="chart-type-btn" data-chart="pie">🥧 饼状图分布</button>
+                            <button class="chart-type-btn" data-chart="scatter">✨ 散点图展示</button>
+                        </div>
+                    </div>
+                    <div id="chartDisplayArea" style="display:none;">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
