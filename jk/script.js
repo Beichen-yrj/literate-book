@@ -756,11 +756,11 @@
                 const btn = document.getElementById('aiSpeakLastBtn');
                 if (btn) {
                     if (speaking) {
-                        btn.textContent = '[停止]';
+                        btn.textContent = '⏹';
                         btn.title = '停止朗读';
                         btn.classList.add('speaking');
                     } else {
-                        btn.textContent = '[朗读]';
+                        btn.textContent = '🔊';
                         btn.title = '朗读最后一条回复';
                         btn.classList.remove('speaking');
                     }
@@ -809,7 +809,7 @@
                 [生态] <b>生态+健康养生</b>：以生态资源+身心修复为核心，依托森林、湿地、海滨、温泉等自然环境。<br>
                 [休闲] <b>休闲+健康养生</b>：以舒适度假、放松身心为核心，主打轻松舒适的轻度假形态。<br>
                 [医疗] <b>医疗+健康养生</b>：以专业医疗+健康管理为核心，提供健康体检、中医理疗等服务。<br>
-                [提示] 想要了解某个模式的详细信息和消费档次，请点击主页的"[养生] 养生方式"查看哦！
+                💡 想要了解某个模式的详细信息和消费档次，请点击主页的"🌿 养生方式"查看哦！
               `;
                 } else if (q.includes('怎么') && (q.includes('用') || q.includes('使用') || q.includes('操作'))) {
                     response = `
@@ -819,18 +819,18 @@
                 3. 点击 <b>"[计算] 快速计算"</b>，系统将智能匹配最适合您的康养模式。<br>
                 4. 点击 <b>"[散点] 进入可视化分析"</b> 查看图表对比。<br>
                 5. 在可视化页面选择折线图、饼状图或散点图查看详细对比。<br>
-                [提示] 也可以点击主页的 <b>"[养生] 养生方式"</b> 浏览四种模式的图文介绍和消费档次！
+                💡 也可以点击主页的 <b>"🌿 养生方式"</b> 浏览四种模式的图文介绍和消费档次！
               `;
                 } else if (q.includes('导航') || q.includes('找到') || q.includes('界面') || q.includes('去哪')) {
                     response = `
                 <strong>[导航] 快速导航：</strong><br>
-                [主页] <b>主页</b> - 点击左上角返回按钮或"返回主页"<br>
+                🏠 <b>主页</b> - 点击左上角返回按钮或"返回主页"<br>
                 [数据] <b>数据化选择</b> - 点击主页绿色卡片"康养模式数据化选择"<br>
                 [图表] <b>可视化分析</b> - 点击主页橙色卡片"可视化呈现图分析"<br>
-                [养生] <b>养生方式详情</b> - 点击主页顶部"[养生] 养生方式"按钮<br>
+                🌿 <b>养生方式详情</b> - 点击主页顶部"🌿 养生方式"按钮<br>
                 [介绍] <b>研究背景</b> - 点击主页顶部"[介绍] 研究背景"按钮<br>
                 [导航] <b>模式简介</b> - 点击主页顶部"[导航] 模式简介"按钮<br>
-                [交流] 需要我直接带你跳转吗？告诉我你想去哪个页面！
+                💬 需要我直接带你跳转吗？告诉我你想去哪个页面！
               `;
                 } else if (q.includes('结果') || q.includes('推荐') || q.includes('数据')) {
                     if (bestIdx !== null && simScores) {
@@ -851,13 +851,13 @@
                 } else if (q.includes('朗读') || q.includes('读出') || q.includes('语音') || q.includes('扬声器')) {
                     if (speaking) {
                         stopSpeaking();
-                        response = '[停止] 已停止语音朗读。再次点击"朗读推荐"可重新朗读。';
+                        response = '⏹ 已停止语音朗读。再次点击"朗读推荐"可重新朗读。';
                     } else {
                         if (bestIdx === null) {
                             response = '[注意] 暂无推荐结果，请先完成数据化选择后再使用朗读功能。';
                         } else {
                             speakLastRecommendation();
-                            response = '[朗读] 正在朗读推荐内容！<br>>> 点击聊天框下方的 <b>[停止]</b> 按钮可停止朗读。<br>>> 再次点击"朗读推荐"也可停止。<br>[提示] 朗读适配说明：<br>1. 优先使用浏览器内置语音（Chrome/Edge/Safari）<br>2. 如内置语音不可用，自动切换在线语音<br>3. 如在线语音也不可用，内容将复制到剪贴板<br>4. 请确保设备音量已开启';
+                            response = '🔊 正在朗读推荐内容！<br>>> 点击聊天框下方的 <b>⏹</b> 按钮可停止朗读。<br>>> 再次点击"朗读推荐"也可停止。<br>💡 朗读适配说明：<br>1. 优先使用浏览器内置语音（Chrome/Edge/Safari）<br>2. 如内置语音不可用，自动切换在线语音<br>3. 如在线语音也不可用，内容将复制到剪贴板<br>4. 请确保设备音量已开启';
                         }
                     }
                 } else if (q.includes('放大') || q.includes('缩小') || q.includes('字体') || q.includes('页面缩放')) {
@@ -884,7 +884,7 @@
                 [帮助] <b>怎么使用</b> - 学习平台操作<br>
                 [导航] <b>帮我导航</b> - 快速找到页面<br>
                 [数据] <b>查看结果</b> - 呈现数据推荐<br>
-                [朗读] <b>朗读推荐</b> - 语音播报结果<br>
+                🔊 <b>朗读推荐</b> - 语音播报结果<br>
                 [价格] <b>消费档次</b> - 查看ABCD档价格<br>
                 [缩放] <b>页面缩放</b> - 调整字体大小<br>
                 请点击上方快捷按钮或输入关键词，小旅随时为你服务！
@@ -1010,7 +1010,7 @@
               </div>
             </div>
           `;
-                showDetail('[养生] 养生方式总览', html, true, 'healthStyle');
+                showDetail('🌿 养生方式总览', html, true, 'healthStyle');
 
                 setTimeout(function() {
                     document.querySelectorAll('.mode-card[data-mode-index]').forEach(function(card) {
@@ -1032,7 +1032,7 @@
                       <h4 style="color:#4a6b3a; margin-top:18px;">[价格] 消费档次推荐</h4>
                       ${tiersHtml}
                     `;
-                            showDetail('[养生] ' + modeNames[modeIdx] + ' · 详情', contentHtml,
+                            showDetail('🌿 ' + modeNames[modeIdx] + ' · 详情', contentHtml,
                                 true, stackKey);
                         });
                     });
@@ -1069,7 +1069,7 @@
                 </div>
               `;
                     detailContent.innerHTML =
-                        `<div class="detail-title">[养生] 养生方式总览</div><div class="detail-text">${html}</div>`;
+                        `<div class="detail-title">🌿 养生方式总览</div><div class="detail-text">${html}</div>`;
                     updateBackButtonVisibility();
 
                     setTimeout(function() {
@@ -1092,7 +1092,7 @@
                           <h4 style="color:#4a6b3a; margin-top:18px;">[价格] 消费档次推荐</h4>
                           ${tiersHtml}
                         `;
-                                showDetail('[养生] ' + modeNames[modeIdx] +
+                                showDetail('🌿 ' + modeNames[modeIdx] +
                                     ' · 详情', contentHtml, true, stackKey);
                             });
                         });
