@@ -100,7 +100,7 @@
     var simScores = null;
     var navStack = [];
 
-    var deepseekApiKey = 'sk-dd48e050272f472b89991d2ff9303b2b';
+    var deepseekApiKey = 'sk-8ab028cdb27f44a38b712422179e63ba';
     var deepseekApiUrl = 'https://api.deepseek.com/chat/completions';
     var chatHistory = [];
     var isAiLoading = false;
