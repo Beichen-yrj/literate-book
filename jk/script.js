@@ -1,4 +1,4 @@
-﻿﻿(function() {
+﻿﻿﻿(function() {
 
     // 四种康养模式
     var modeNames = ["文化+健康养生", "生态+健康养生", "休闲+健康养生", "医疗+健康养生"];
@@ -1469,6 +1469,7 @@
     var origRenderPriceTiers = renderPriceTiers;
     renderPriceTiers = function(tiers, modeName) {
         var mName = modeName || '康养旅游';
+        console.log('renderPriceTiers called, modeName:', mName);
         var html = '<div class="price-tiers">';
         tiers.forEach(function(t, idx) {
             html +=
@@ -1481,8 +1482,10 @@
         });
         html += '</div>';
         setTimeout(function() {
+            console.log('Setting up click handlers for', document.querySelectorAll('.tier-card-clickable').length, 'cards');
             document.querySelectorAll('.tier-card-clickable').forEach(function(card) {
                 card.onclick = function() {
+                    console.log('Tier card clicked!');
                     var label = this.getAttribute('data-tier-label');
                     var price = this.getAttribute('data-tier-price');
                     var detail = this.getAttribute('data-tier-detail');
