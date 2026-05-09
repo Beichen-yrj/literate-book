@@ -1,4 +1,4 @@
-﻿﻿﻿﻿* {
+﻿﻿﻿﻿﻿﻿﻿﻿﻿* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -509,65 +509,77 @@ body {
 
 .visual-layout {
     display: flex;
-    gap: 24px;
+    gap: 20px;
     align-items: flex-start;
+    width: 100%;
 }
 
-.visual-sidebar {
-    width: 240px;
-    min-width: 240px;
+.visual-sidebar-left {
+    width: 220px;
+    min-width: 220px;
     background: #fff;
     border-radius: 16px;
-    padding: 20px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
     border: 1px solid #e8f0e0;
+    transition: width 0.35s ease, min-width 0.35s ease, opacity 0.3s ease;
+    overflow: hidden;
     position: sticky;
     top: 20px;
 }
 
-.visual-sidebar-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #1a2e1a;
+.visual-sidebar-left.collapsed {
+    width: 50px;
+    min-width: 50px;
+}
+
+.visual-sidebar-left.collapsed .visual-sidebar-body {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.visual-sidebar-left.collapsed .visual-sidebar-title {
+    display: none;
 }
 
 .visual-sidebar-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 8px;
+    padding: 16px 14px;
     cursor: pointer;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #e8f0e0;
-    margin-bottom: 16px;
     user-select: none;
+    border-bottom: 1px solid #e8f0e0;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .visual-sidebar-header:hover {
     background: rgba(74, 139, 74, 0.05);
-    border-radius: 8px;
 }
 
-.visual-sidebar-arrow {
+.visual-sidebar-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1a2e1a;
+    flex: 1;
+    transition: opacity 0.2s;
+}
+
+.visual-sidebar-arrow-left {
     font-size: 1.1rem;
     color: #4a8b4a;
-    transition: transform 0.3s;
+    transition: transform 0.35s ease;
+    flex-shrink: 0;
 }
 
-.visual-sidebar-arrow.collapsed {
-    transform: rotate(-90deg);
+.visual-sidebar-arrow-left.collapsed {
+    transform: rotate(180deg);
 }
 
 .visual-sidebar-body {
+    padding: 14px;
     overflow: hidden;
-    transition: max-height 0.35s ease, opacity 0.25s ease;
-    max-height: 600px;
-    opacity: 1;
-}
-
-.visual-sidebar-body.collapsed {
-    max-height: 0;
-    opacity: 0;
-    margin: 0;
+    transition: opacity 0.25s ease;
 }
 
 .visual-slider-group {
@@ -844,17 +856,20 @@ body {
 .chart-container {
     background: #fff;
     border-radius: 14px;
-    padding: 20px;
+    padding: 16px;
     margin: 15px 0;
     width: 100%;
-    max-width: 700px;
-    height: 380px;
+    max-width: 100%;
+    height: auto;
+    min-height: 320px;
     position: relative;
+    box-sizing: border-box;
 }
 
-canvas {
-    width: 100%;
-    height: 100%;
+.chart-container canvas {
+    max-width: 100%;
+    height: auto !important;
+    aspect-ratio: 16 / 9;
 }
 
 .button-row {
@@ -1543,13 +1558,42 @@ canvas {
         flex-direction: column;
     }
 
-    .visual-sidebar {
-        width: 100%;
-        min-width: 0;
-        position: static;
+    .visual-sidebar-left {
+        width: 100% !important;
+        min-width: 0 !important;
+        position: static !important;
+        border-radius: 12px;
     }
 
-    .home-card {
+    .visual-sidebar-left.collapsed {
+        width: 50px !important;
+    }
+
+    .visual-sidebar-left .visual-sidebar-body {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+
+    .visual-sidebar-left .visual-sidebar-title {
+        display: inline !important;
+    }
+
+    .visual-main {
+        width: 100%;
+    }
+
+    .chart-container {
+        max-width: 100%;
+        height: auto;
+        padding: 10px;
+        min-height: 250px;
+    }
+
+    .chart-container canvas {
+        aspect-ratio: 16 / 9;
+    }
+
+        .home-card {
         padding: 16px;
     }
 
@@ -1562,10 +1606,8 @@ canvas {
         min-width: 0;
     }
 
-    .chart-container {
-        max-width: 100%;
-        height: 280px;
-        padding: 10px;
+    .param-group {
+        min-width: 0;
     }
 
     .image-gallery img {
@@ -1584,6 +1626,25 @@ canvas {
     }
 
     .ai-assistant-wrapper {
+        top: 12px;
+        right: 12px;
+    }
+
+    .ai-bubble {
+        font-size: 0.75rem;
+        padding: 6px 10px;
+    }
+
+    .ai-avatar-btn {
+        width: 46px;
+        height: 46px;
+    }
+
+    .ai-face {
+        width: 34px;
+        height: 34px;
+    }
+}ai-assistant-wrapper {
         top: 12px;
         right: 12px;
     }

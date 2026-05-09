@@ -1,4 +1,4 @@
-﻿﻿﻿(function() {
+﻿﻿﻿﻿﻿﻿﻿(function() {
 
     var modeNames = ["文化+健康养生", "生态+健康养生", "休闲+健康养生", "医疗+健康养生"];
     var modeFeatures = [
@@ -593,8 +593,10 @@
                     datasets: [{ data: userVec, backgroundColor: userColors, borderColor: '#ffffff', borderWidth: 2 }]
                 },
                 options: {
+                    responsive: true,
                     plugins: {
-                        title: { display: true, text: '您的兴趣分布', color: '#2d4a2c', font: { size: 15 } }
+                        title: { display: true, text: '您的兴趣分布', color: '#2d4a2c', font: { size: window.innerWidth < 768 ? 12 : 15 } },
+                        legend: { position: 'bottom', labels: { font: { size: window.innerWidth < 768 ? 10 : 12 }, padding: 10 } }
                     }
                 }
             });
@@ -605,8 +607,10 @@
                     datasets: [{ data: modeVec, backgroundColor: modeColors, borderColor: '#ffffff', borderWidth: 2 }]
                 },
                 options: {
+                    responsive: true,
                     plugins: {
-                        title: { display: true, text: '推荐模式：' + modeNames[bestModeIdx], color: '#2d4a2c', font: { size: 15 } }
+                        title: { display: true, text: '推荐模式：' + modeNames[bestModeIdx], color: '#2d4a2c', font: { size: window.innerWidth < 768 ? 12 : 15 } },
+                        legend: { position: 'bottom', labels: { font: { size: window.innerWidth < 768 ? 10 : 12 }, padding: 10 } }
                     }
                 }
             });
@@ -631,7 +635,29 @@
                                 borderWidth: 3, borderDash: [6, 3] }
                         ]
                     },
-                    options: { responsive: true, maintainAspectRatio: false }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { intersect: false, mode: 'index' },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: { font: { size: window.innerWidth < 768 ? 11 : 13 }, padding: 15, usePointStyle: true }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { size: window.innerWidth < 768 ? 10 : 12 } }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                max: 10,
+                                grid: { color: 'rgba(0,0,0,0.06)' },
+                                ticks: { font: { size: window.innerWidth < 768 ? 10 : 12 } }
+                            }
+                        }
+                    }
                 });
                 document.getElementById('chartExplanation').innerHTML =
                     '<strong>📉 折线图解读：</strong>绿色实线代表您的兴趣分布，橙色虚线为推荐模式的特征。两者在关键维度上高度重合。';
@@ -641,14 +667,29 @@
                     data: {
                         datasets: [
                             { label: '您的兴趣点', data: userVec.map(function(v, i) { return { x: i, y: v }; }),
-                                backgroundColor: '#2d6a4f', pointRadius: 10, pointHoverRadius: 13 },
+                                backgroundColor: '#2d6a4f', pointRadius: window.innerWidth < 768 ? 8 : 10, pointHoverRadius: 13 },
                             { label: '推荐模式点', data: modeVec.map(function(v, i) { return { x: i, y: v }; }),
-                                backgroundColor: '#d97c4a', pointRadius: 10, pointHoverRadius: 13, pointStyle: 'triangle' }
+                                backgroundColor: '#d97c4a', pointRadius: window.innerWidth < 768 ? 8 : 10, pointHoverRadius: 13, pointStyle: 'triangle' }
                         ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        interaction: { intersect: false, mode: 'index' },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: { font: { size: window.innerWidth < 768 ? 11 : 13 }, padding: 15, usePointStyle: true }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        var dimLabels = ['文化', '生态', '休闲', '医疗'];
+                                        return context.dataset.label + ' - ' + dimLabels[context.parsed.x] + ': ' + context.parsed.y;
+                                    }
+                                }
+                            }
+                        },
                         scales: {
                             x: {
                                 min: -0.5,
@@ -658,27 +699,18 @@
                                     callback: function(value) {
                                         var labels = ['文化', '生态', '休闲', '医疗'];
                                         return labels[value] || '';
-                                    }
+                                    },
+                                    font: { size: window.innerWidth < 768 ? 9 : 12 }
                                 },
-                                title: { display: true, text: '兴趣维度', color: '#2d4a2c', font: { size: 13 } },
+                                title: { display: true, text: '兴趣维度', color: '#2d4a2c', font: { size: window.innerWidth < 768 ? 10 : 13 } },
                                 grid: { color: 'rgba(0,0,0,0.06)' }
                             },
                             y: {
                                 beginAtZero: true,
                                 max: 10,
-                                title: { display: true, text: '兴趣值', color: '#2d4a2c', font: { size: 13 } },
-                                grid: { color: 'rgba(0,0,0,0.06)' }
-                            }
-                        },
-                        plugins: {
-                            legend: { position: 'top', labels: { font: { size: 13 } } },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        var dimLabels = ['文化', '生态', '休闲', '医疗'];
-                                        return context.dataset.label + ' - ' + dimLabels[context.parsed.x] + ': ' + context.parsed.y;
-                                    }
-                                }
+                                title: { display: true, text: '兴趣值', color: '#2d4a2c', font: { size: window.innerWidth < 768 ? 10 : 13 } },
+                                grid: { color: 'rgba(0,0,0,0.06)' },
+                                ticks: { font: { size: window.innerWidth < 768 ? 9 : 12 } }
                             }
                         }
                     }
@@ -1381,18 +1413,18 @@
     vMedicalSlider.addEventListener('input', onSliderChange);
 
     var visualSidebarToggle = document.getElementById('visualSidebarToggle');
-    var visualSidebarBody = document.getElementById('visualSidebarBody');
+    var visualSidebar = document.getElementById('visualSidebar');
     var visualSidebarArrow = document.getElementById('visualSidebarArrow');
-    var visualSidebarCollapsed = false;
+    var visualSidebarCollapsed = true;
 
-    if (visualSidebarToggle) {
+    if (visualSidebarToggle && visualSidebar) {
         visualSidebarToggle.addEventListener('click', function() {
             visualSidebarCollapsed = !visualSidebarCollapsed;
             if (visualSidebarCollapsed) {
-                visualSidebarBody.classList.add('collapsed');
+                visualSidebar.classList.add('collapsed');
                 visualSidebarArrow.classList.add('collapsed');
             } else {
-                visualSidebarBody.classList.remove('collapsed');
+                visualSidebar.classList.remove('collapsed');
                 visualSidebarArrow.classList.remove('collapsed');
             }
         });
