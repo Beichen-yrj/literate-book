@@ -1,4 +1,4 @@
-﻿﻿(function() {
+﻿﻿﻿(function() {
 
     // 四种康养模式
     var modeNames = ["文化+健康养生", "生态+健康养生", "休闲+健康养生", "医疗+健康养生"];
@@ -100,7 +100,7 @@
     var simScores = null;
     var navStack = [];
 
-    var deepseekApiKey = 'sk-sk-351129838a8541b986cf631ead1308fd';
+    var deepseekApiKey = 'sk-dd48e050272f472b89991d2ff9303b2b';
     var deepseekApiUrl = 'https://api.deepseek.com/chat/completions';
     var chatHistory = [];
     var isAiLoading = false;
