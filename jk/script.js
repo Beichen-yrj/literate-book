@@ -100,7 +100,7 @@
     var simScores = null;
     var navStack = [];
 
-    var deepseekApiKey = 'sk-dd48e050272f472b89991d2ff9303b2b';
+    var deepseekApiKey = 'sk-sk-351129838a8541b986cf631ead1308fd';
     var deepseekApiUrl = 'https://api.deepseek.com/chat/completions';
     var chatHistory = [];
     var isAiLoading = false;
@@ -137,7 +137,7 @@
             '\n\n【算法说明】使用K均值聚类将老年游客划分为四类用户画像（文化探寻者、自然热衷者、都市逃离者、活力养护者），再用余弦相似度量化用户与模式的匹配度' +
             '\n\n【当前状态】' + currentResult +
             '\n\n【注意事项】' +
-            '\n- 如果用户问朗读/语音相关，告诉他们点击聊天框下方的&#x1F50A;按钮或快捷按钮中的"朗读推荐"' +
+            '\n- 如果用户问朗读/语音相关，告诉他们点击聊天框下方的🔊按钮或快捷按钮中的"朗读推荐"' +
             '\n- 如果用户问页面缩放，告诉他们使用聊天面板中的放大+/缩小-按钮' +
             '\n- 回复控制在200字以内，简洁明了' +
             '\n- 不要编造不存在的功能或数据';
@@ -219,39 +219,39 @@
     function renderResearchBackground() {
         var el = document.getElementById('researchContent');
         el.innerHTML =
-            '<div class="detail-title">&#x1F4D6; 研究背景</div>' +
+            '<div class="detail-title">📖 研究背景</div>' +
             '<div class="detail-text">当前，全球人口老龄化进程不断加快，中国作为人口大国，老龄化态势尤为突出，已正式步入中度老龄化社会。截至近年，我国60岁及以上老年人口突破3亿，占总人口比例超五分之一，且老年人口规模持续扩大，高龄化、空巢化、失能化趋势日益明显，传统家庭养老与公共养老服务体系面临严峻压力，养老供需矛盾逐渐凸显。与此同时，国家将积极应对人口老龄化上升为国家战略，陆续出台多项政策扶持银发经济发展，从顶层设计为产业发展指明方向，推动养老服务、健康医疗、适老用品、老年文旅等领域规范化、规模化发展。随着社会经济发展，老年群体消费观念逐步转变，从基础的生存型消费，向健康养生、精神文化、智慧养老等品质型、多元化消费升级，消费潜力持续释放。银发经济不仅是破解养老难题、保障老年群体福祉的重要抓手，更成为新时代扩大内需、培育经济发展新动能的关键领域，蕴含巨大市场空间。在此背景下，深入研究银发经济的发展现状、产业痛点与未来趋势，具有极强的现实意义与实践价值。</div>';
     }
 
     function renderModeIntroduction() {
         var el = document.getElementById('modeIntroContent');
         el.innerHTML =
-            '<div class="detail-title">&#x1F9F2; 模式简介</div>' +
+            '<div class="detail-title">🧲 模式简介</div>' +
             '<div class="detail-text">本文构建文化+、生态+、休闲+、医疗+四类康养旅游模式，并运用K均值聚类+余弦相似度实现用户画像与旅游模式精准匹配。K均值聚类算法以文化体验、自然疗愈、休闲享乐、健康需求为维度，对样本数据迭代聚类，将老年游客划分为自然热衷者、都市逃离者、文化探寻者、活力养护者四类用户画像，实现需求群体精准细分。余弦相似度算法用于量化匹配度，先将用户特征与模式特征转化为四维向量，再通过向量夹角计算相似度，取值范围为[-1,1]，数值越接近1表示匹配度越高。基于算法计算，自然热衷者匹配生态+模式，都市逃离者匹配休闲+模式，文化探寻者匹配文化+模式，活力养护者匹配医疗+模式。该方法以数据驱动实现供需精准对接，有效解决康养旅游同质化、供需错配问题，为老年康养旅游精准服务提供科学支撑。</div>';
     }
 
     function renderHealthStylePage() {
         var el = document.getElementById('healthStyleContent');
         var html =
-            '<div class="detail-title">&#x1F33F; 养生方式总览</div>' +
+            '<div class="detail-title">🌿 养生方式总览</div>' +
             '<div class="mode-cards">' +
             '<div class="mode-card" data-mode-index="0">' +
-                '<span class="card-title">&#x1F4DA; 文化体验旅游模式</span>' +
+                '<span class="card-title">📚 文化体验旅游模式</span>' +
                 '<div class="card-desc">文化体验康养旅游以文化浸润+身心养生为核心，融合历史文化、民俗风情、传统技艺与禅修静养等内容，依托文化古迹、传统村落、非遗资源打造沉浸式体验场景。</div>' +
                 '<div class="card-hint">>> 点击查看图片展示 & 消费档次</div>' +
             '</div>' +
             '<div class="mode-card" data-mode-index="1">' +
-                '<span class="card-title">&#x1F331; 自然疗愈旅游模式</span>' +
+                '<span class="card-title">🌱 自然疗愈旅游模式</span>' +
                 '<div class="card-desc">自然疗愈康养旅游以生态资源+身心修复为核心，依托森林、湿地、海滨、温泉等自然生态环境，突出自然环境的疗愈功效与生态互动体验。</div>' +
                 '<div class="card-hint">>> 点击查看图片展示 & 消费档次</div>' +
             '</div>' +
             '<div class="mode-card" data-mode-index="2">' +
-                '<span class="card-title">&#x1F9CB; 休闲享乐旅游模式</span>' +
+                '<span class="card-title">🛋 休闲享乐旅游模式</span>' +
                 '<div class="card-desc">休闲享乐康养旅游以舒适度假、放松身心为核心，面向追求高品质旅居体验的老年群体，主打轻松舒适的轻度假形态。</div>' +
                 '<div class="card-hint">>> 点击查看图片展示 & 消费档次</div>' +
             '</div>' +
             '<div class="mode-card" data-mode-index="3">' +
-                '<span class="card-title">&#x1F3E5; 健康需求旅游模式</span>' +
+                '<span class="card-title">🏥 健康需求旅游模式</span>' +
                 '<div class="card-desc">健康需求康养旅游以专业医疗+健康管理为核心，面向存在健康维护、康复疗养或亚健康调理需求的老年群体，提供健康体检、中医理疗等服务。</div>' +
                 '<div class="card-hint">>> 点击查看图片展示 & 消费档次</div>' +
             '</div>' +
@@ -278,11 +278,11 @@
             '<p style="color:#3a5535; line-height:1.7;"><strong>' + detail.activities + '</strong></p>' +
             '<h4 style="color:#4a6b3a; margin-top:18px;">🖼 图片展示</h4>' +
             imgHtml +
-            '<h4 style="color:#4a6b3a; margin-top:18px;">&#x1F4B5; 消费档次推荐</h4>' +
+            '<h4 style="color:#4a6b3a; margin-top:18px;">💵 消费档次推荐</h4>' +
             tiersHtml;
 
         detailContent.innerHTML =
-            '<div class="detail-title">&#x1F33F; ' + modeNames[modeIdx] + ' · 详情</div>' +
+            '<div class="detail-title">🌿 ' + modeNames[modeIdx] + ' · 详情</div>' +
             '<div class="detail-text">' + contentHtml + '</div>';
 
         navStack.push('healthStyle');
@@ -296,7 +296,7 @@
             html +=
                 '<div class="tier-card">' +
                   '<span class="tier-label ' + t.tierClass + '">' + t.label + '</span>' +
-                  '<div class="tier-price">&#x1F4B0; ' + t.price + '</div>' +
+                  '<div class="tier-price">💰 ' + t.price + '</div>' +
                   '<div class="tier-detail">' + t.detail + '</div>' +
                 '</div>';
         });
@@ -362,9 +362,9 @@
         modeNames.forEach(function(name, i) {
             html += name + '：' + sims[i].toFixed(4) + '<br>';
         });
-        html += '<br>&#x1F929; <span style="color:#1e4a1e; font-weight:bold;">为您推荐：' + modeNames[best] + ' (匹配度 ' + sims[best].toFixed(4) + ')</span>';
-        html += '<br><br><strong>&#x26A0; 推荐理由：</strong>' + detail.reason + '<br><strong>&#x26A0; ' + detail.activities + '</strong>';
-        html += '<br><br><strong>&#x1F4B5; 消费档次推荐：</strong>';
+        html += '<br>🌟 <span style="color:#1e4a1e; font-weight:bold;">为您推荐：' + modeNames[best] + ' (匹配度 ' + sims[best].toFixed(4) + ')</span>';
+        html += '<br><br><strong>⚠ 推荐理由：</strong>' + detail.reason + '<br><strong>⚠ ' + detail.activities + '</strong>';
+        html += '<br><br><strong>💵 消费档次推荐：</strong>';
         html += renderPriceTiers(detail.priceTiers);
         calcResultDisplay.innerHTML = html;
         calcResultDisplay.style.display = 'block';
@@ -550,9 +550,9 @@
                 '<div id="recommendSummaryBox" class="recommend-summary"></div>' +
                 '<div class="button-row">' +
                   '<button class="btn-return-chart" id="backToChartSelection">🔄 重新选择图表</button>' +
-                  '<button class="btn-export-excel" id="exportExcelChart">&#x1F4E4; 导出 Excel</button>' +
-                  '<button class="btn-export-word" id="exportWordChart">&#x1F4C4; 导出 Word</button>' +
-                  '<button class="btn-return-home" id="backToHomeFromChart">&#x21A9; 返回主页</button>' +
+                  '<button class="btn-export-excel" id="exportExcelChart">📤 导出 Excel</button>' +
+                  '<button class="btn-export-word" id="exportWordChart">📄 导出 Word</button>' +
+                  '<button class="btn-return-home" id="backToHomeFromChart">↩ 返回主页</button>' +
                 '</div>';
         }
     }
@@ -567,9 +567,9 @@
             '<div id="recommendSummaryBox" class="recommend-summary"></div>' +
             '<div class="button-row">' +
               '<button class="btn-return-chart" id="backToChartSelection">🔄 重新选择图表</button>' +
-              '<button class="btn-export-excel" id="exportExcelChart">&#x1F4E4; 导出 Excel</button>' +
-              '<button class="btn-export-word" id="exportWordChart">&#x1F4C4; 导出 Word</button>' +
-              '<button class="btn-return-home" id="backToHomeFromChart">&#x21A9; 返回主页</button>' +
+              '<button class="btn-export-excel" id="exportExcelChart">📤 导出 Excel</button>' +
+              '<button class="btn-export-word" id="exportWordChart">📄 导出 Word</button>' +
+              '<button class="btn-return-home" id="backToHomeFromChart">↩ 返回主页</button>' +
             '</div>';
     }
 
@@ -624,7 +624,7 @@
                 }
             });
             document.getElementById('chartExplanation').innerHTML =
-                '<strong>&#x1F967; 饼图解读：</strong>左侧为用户兴趣占比（多彩自然色），右侧为推荐模式特征占比（大地暖色系），颜色对比鲜明且结构相似度极高。';
+                '<strong>🥧 饼图解读：</strong>左侧为用户兴趣占比（多彩自然色），右侧为推荐模式特征占比（大地暖色系），颜色对比鲜明且结构相似度极高。';
         } else {
             ensureStandardChartLayout();
             var canvas = document.getElementById('myChart');
@@ -669,7 +669,7 @@
                     }
                 });
                 document.getElementById('chartExplanation').innerHTML =
-                    '<strong>&#x1F4C9; 折线图解读：</strong>绿色实线代表您的兴趣分布，橙色虚线为推荐模式的特征。两者在关键维度上高度重合。';
+                    '<strong>📉 折线图解读：</strong>绿色实线代表您的兴趣分布，橙色虚线为推荐模式的特征。两者在关键维度上高度重合。';
             } else if (chartType === 'scatter') {
                 myChart = new Chart(ctx, {
                     type: 'scatter',
@@ -725,15 +725,15 @@
                     }
                 });
                 document.getElementById('chartExplanation').innerHTML =
-                    '<strong>&#x26AA; 散点图解读：</strong>绿色圆点为您，橙色三角为推荐模式，位置越接近匹配越佳。';
+                    '<strong>⚪ 散点图解读：</strong>绿色圆点为您，橙色三角为推荐模式，位置越接近匹配越佳。';
             }
         }
 
         var summaryEl = document.getElementById('recommendSummaryBox');
         if (summaryEl) {
             summaryEl.innerHTML =
-                '<strong>&#x26A0; 最终推荐：' + modeNames[bestModeIdx] + '</strong><br><em>适合人群：' + detail.who + '</em><br><strong>推荐理由：</strong>' + detail.reason + '<br><strong>' + detail.activities + '</strong>';
-            summaryEl.innerHTML += '<br><br><strong>&#x1F4B5; 消费档次推荐：</strong>';
+                '<strong>⚠ 最终推荐：' + modeNames[bestModeIdx] + '</strong><br><em>适合人群：' + detail.who + '</em><br><strong>推荐理由：</strong>' + detail.reason + '<br><strong>' + detail.activities + '</strong>';
+            summaryEl.innerHTML += '<br><br><strong>💵 消费档次推荐：</strong>';
             summaryEl.innerHTML += renderPriceTiers(detail.priceTiers);
 
             summaryEl.setAttribute('data-recommend-text',
@@ -882,11 +882,11 @@
         var btn = document.getElementById('aiSpeakLastBtn');
         if (btn) {
             if (speaking) {
-                btn.textContent = '&#x23F9;';
+                btn.textContent = '⏹';
                 btn.title = '停止朗读';
                 btn.classList.add('speaking');
             } else {
-                btn.textContent = '&#x1F50A;';
+                btn.textContent = '🔊';
                 btn.title = '朗读最后一条回复';
                 btn.classList.remove('speaking');
             }
@@ -925,13 +925,13 @@
         if (q.includes('朗读') || q.includes('读出') || q.includes('语音播报')) {
             if (speaking) {
                 stopSpeaking();
-                return '&#x23F9; 已停止语音朗读。再次点击"朗读推荐"可重新朗读。';
+                return '⏹ 已停止语音朗读。再次点击"朗读推荐"可重新朗读。';
             } else {
                 if (bestIdx === null) {
-                    return '&#x26A0; 暂无推荐结果，请先完成数据化选择后再使用朗读功能。';
+                    return '⚠ 暂无推荐结果，请先完成数据化选择后再使用朗读功能。';
                 } else {
                     speakLastRecommendation();
-                    return '&#x1F50A; 正在朗读推荐内容！点击聊天框下方的 &#x23F9; 按钮可停止朗读。';
+                    return '🔊 正在朗读推荐内容！点击聊天框下方的 ⏹ 按钮可停止朗读。';
                 }
             }
         }
@@ -976,7 +976,7 @@
             return reply;
         }).catch(function(err) {
             chatHistory.pop();
-            return '&#x26A0; 网络连接异常，请检查网络后重试。(' + err.message + ')';
+            return '⚠ 网络连接异常，请检查网络后重试。(' + err.message + ')';
         });
     }
 
@@ -1219,19 +1219,19 @@
 
     // 轮播图数据列表
     var carouselImages = [
-        { src: 'photos/1.jpg', caption: '&#x1F33F; 康养旅游 · 自然疗愈之旅' },
-        { src: 'photos/2.jpg', caption: '&#x1F4DA; 文化体验 · 历史名城探秘' },
-        { src: 'photos/5.jpg', caption: '&#x1F331; 生态养生 · 森林氧吧漫步' },
-        { src: 'photos/8.jpg', caption: '&#x1F9CB; 休闲度假 · 温泉SPA享乐' },
-        { src: 'photos/11.jpg', caption: '&#x1F3E5; 健康管理 · 中医理疗养生' },
-        { src: 'photos/3.jpg', caption: '&#x1F3DE; 银发旅游 · 品质生活新方式' },
-        { src: 'photos/6.jpg', caption: '&#x1F30A; 滨海康养 · 海天一色' },
-        { src: 'photos/9.jpg', caption: '&#x267B; 温泉疗养 · 身心舒展' },
-        { src: 'photos/12.jpg', caption: '&#x1F48A; 医养结合 · 科学养生' },
-        { src: 'photos/4.jpg', caption: '&#x1F3EF; 非遗体验 · 文化传承' },
-        { src: 'photos/7.jpg', caption: '&#x1F3D4; 生态度假 · 回归自然' },
-        { src: 'photos/10.jpg', caption: '&#x1F37D; 美食之旅 · 舌尖养生' },
-        { src: 'photos/13.jpg', caption: '&#x1F9D8; 康养理疗 · 活力焕新' }
+        { src: 'photos/1.jpg', caption: '🌿 康养旅游 · 自然疗愈之旅' },
+        { src: 'photos/2.jpg', caption: '📚 文化体验 · 历史名城探秘' },
+        { src: 'photos/5.jpg', caption: '🌱 生态养生 · 森林氧吧漫步' },
+        { src: 'photos/8.jpg', caption: '🛋 休闲度假 · 温泉SPA享乐' },
+        { src: 'photos/11.jpg', caption: '🏥 健康管理 · 中医理疗养生' },
+        { src: 'photos/3.jpg', caption: '🏞 银发旅游 · 品质生活新方式' },
+        { src: 'photos/6.jpg', caption: '🌊 滨海康养 · 海天一色' },
+        { src: 'photos/9.jpg', caption: '♨ 温泉疗养 · 身心舒展' },
+        { src: 'photos/12.jpg', caption: '💊 医养结合 · 科学养生' },
+        { src: 'photos/4.jpg', caption: '🏯 非遗体验 · 文化传承' },
+        { src: 'photos/7.jpg', caption: '🏔 生态度假 · 回归自然' },
+        { src: 'photos/10.jpg', caption: '🍽 美食之旅 · 舌尖养生' },
+        { src: 'photos/13.jpg', caption: '🧘 康养理疗 · 活力焕新' }
     ];
     var currentSlide = 0;
     var carouselTrack = document.getElementById('carouselTrack');
@@ -1296,7 +1296,7 @@
             tagClass: 'news-tag-policy',
             title: '国务院办公厅印发《关于发展银发经济增进老年人福祉的意见》',
             date: '2025-01',
-            url: 'https://www.gov.cn/zhengfu/content/202401/content_6926519.htm'
+            url: 'https://www.gov.cn/zhengce/jiedu/tujie/202401/content_6926184.htm'
         },
         {
             tag: '行业',
@@ -1389,7 +1389,7 @@
             if (s > maxSim) { maxSim = s; maxIdx = i; }
         });
         sideResult.innerHTML =
-            '<strong>&#x1F929; 推荐模式：</strong>' + modeNames[maxIdx] + '<br>' +
+            '<strong>🌟 推荐模式：</strong>' + modeNames[maxIdx] + '<br>' +
             '<strong>匹配度：</strong>' + maxSim.toFixed(4) + '<br>' +
             sims.map(function(s, i) {
                 return modeNames[i] + '：' + s.toFixed(4);
@@ -1472,9 +1472,9 @@
         tiers.forEach(function(t, idx) {
             html +=
                 '<div class="tier-card tier-card-clickable" data-tier-label="' + t.label + '" data-tier-price="' + t.price + '" data-tier-detail="' + t.detail.replace(/"/g, '&quot;') + '">' +
-                  '<div class="tier-tooltip">&#x1F4AC; 点击问我了解详情！</div>' +
+                  '<div class="tier-tooltip">💬 点击问我了解详情！</div>' +
                   '<span class="tier-label ' + t.tierClass + '">' + t.label + '</span>' +
-                  '<div class="tier-price">&#x1F4B0; ' + t.price + '</div>' +
+                  '<div class="tier-price">💰 ' + t.price + '</div>' +
                   '<div class="tier-detail">' + t.detail + '</div>' +
                 '</div>';
         });
