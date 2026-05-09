@@ -1,4 +1,4 @@
-﻿(function() {
+﻿﻿(function() {
 
     var modeNames = ["文化+健康养生", "生态+健康养生", "休闲+健康养生", "医疗+健康养生"];
     var modeFeatures = [
@@ -1380,6 +1380,24 @@
     vLeisureSlider.addEventListener('input', onSliderChange);
     vMedicalSlider.addEventListener('input', onSliderChange);
 
+    var visualSidebarToggle = document.getElementById('visualSidebarToggle');
+    var visualSidebarBody = document.getElementById('visualSidebarBody');
+    var visualSidebarArrow = document.getElementById('visualSidebarArrow');
+    var visualSidebarCollapsed = false;
+
+    if (visualSidebarToggle) {
+        visualSidebarToggle.addEventListener('click', function() {
+            visualSidebarCollapsed = !visualSidebarCollapsed;
+            if (visualSidebarCollapsed) {
+                visualSidebarBody.classList.add('collapsed');
+                visualSidebarArrow.classList.add('collapsed');
+            } else {
+                visualSidebarBody.classList.remove('collapsed');
+                visualSidebarArrow.classList.remove('collapsed');
+            }
+        });
+    }
+
     var origRenderChart = renderChart;
     renderChart = function(chartType) {
         currentChartType = chartType;
@@ -1403,16 +1421,31 @@
     var origRenderPriceTiers = renderPriceTiers;
     renderPriceTiers = function(tiers) {
         var html = '<div class="price-tiers">';
-        tiers.forEach(function(t) {
+        tiers.forEach(function(t, idx) {
             html +=
-                '<div class="tier-card">' +
-                  '<div class="tier-tooltip">💬 可以问我了解详情哦！</div>' +
+                '<div class="tier-card tier-card-clickable" data-tier-label="' + t.label + '" data-tier-price="' + t.price + '" data-tier-detail="' + t.detail.replace(/"/g, '&quot;') + '">' +
+                  '<div class="tier-tooltip">💬 点击问我了解详情！</div>' +
                   '<span class="tier-label ' + t.tierClass + '">' + t.label + '</span>' +
                   '<div class="tier-price">💰 ' + t.price + '</div>' +
                   '<div class="tier-detail">' + t.detail + '</div>' +
                 '</div>';
         });
         html += '</div>';
+        setTimeout(function() {
+            document.querySelectorAll('.tier-card-clickable').forEach(function(card) {
+                card.onclick = function() {
+                    var label = this.getAttribute('data-tier-label');
+                    var price = this.getAttribute('data-tier-price');
+                    var detail = this.getAttribute('data-tier-detail');
+                    var question = '请详细介绍一下' + label + '（价格：' + price + '），包括适合人群、具体体验内容和注意事项';
+                    if (!aiChatPanel.classList.contains('open')) {
+                        aiChatPanel.classList.add('open');
+                        aiBubble.style.display = 'none';
+                    }
+                    handleAIQuery(question);
+                };
+            });
+        }, 200);
         return html;
     };
 
