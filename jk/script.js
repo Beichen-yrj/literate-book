@@ -96,6 +96,49 @@
     var simScores = null;
     var navStack = [];
 
+    var deepseekApiKey = 'sk-dd48e050272f472b89991d2ff9303b2b';
+    var deepseekApiUrl = 'https://api.deepseek.com/chat/completions';
+    var chatHistory = [];
+    var isAiLoading = false;
+
+    function buildSystemPrompt() {
+        var currentResult = '暂无计算结果，用户尚未完成数据化选择。';
+        if (bestIdx !== null && simScores) {
+            currentResult = '当前计算结果：' +
+                modeNames.map(function(name, i) { return name + '相似度' + simScores[i].toFixed(4); }).join('，') +
+                '。推荐模式：' + modeNames[bestIdx] + '（匹配度' + simScores[bestIdx].toFixed(4) + '）。' +
+                '适合人群：' + modeDetail[bestIdx].who + '。推荐理由：' + modeDetail[bestIdx].reason +
+                '。' + modeDetail[bestIdx].activities;
+        }
+        return '你是"小旅"，一个友好、专业的康养旅游智能助手，服务于"健康养生旅游模式可视化选择系统"（石家庄铁道大学开发）。' +
+            '你的职责是帮助用户了解康养旅游模式、使用平台功能、解答相关问题。' +
+            '请用简洁、亲切的中文回复，适当使用emoji增加亲和力。' +
+            '\n\n【系统功能】' +
+            '\n- 左侧导航栏包含：系统首页、研究背景、模式简介、养生方式、数据化选择、可视化分析' +
+            '\n- 数据化选择：用户输入文化/生态/休闲/医疗兴趣值（0-10分），系统用余弦相似度算法匹配最佳康养模式' +
+            '\n- 可视化分析：提供折线图、饼状图、散点图三种图表对比' +
+            '\n- 养生方式：展示四种模式的图片、消费档次（ABCD四档，从经济型到高端型）' +
+            '\n- 支持导出Excel和Word报告' +
+            '\n- 支持语音朗读推荐结果' +
+            '\n\n【四种康养模式】' +
+            '\n1. 文化+健康养生：以文化浸润+身心养生为核心，适合文化探寻者，活动包括参观历史文化名城、博物馆、非遗体验、禅修静养等' +
+            '\n2. 生态+健康养生：以生态资源+身心修复为核心，适合自然热衷者，活动包括森林浴、湿地漫步、海滨冥想、温泉疗养等' +
+            '\n3. 休闲+健康养生：以舒适度假、放松身心为核心，适合都市逃离者，活动包括海滨度假村、温泉酒店、美食之旅、SPA护理等' +
+            '\n4. 医疗+健康养生：以专业医疗+健康管理为核心，适合活力养护者，活动包括健康体检、中医理疗、康复训练、营养膳食等' +
+            '\n\n【消费档次】每种模式均有ABCD四档：' +
+            '\n- A档经济型：低价位，基础体验' +
+            '\n- B档舒适型：中等价位，品质体验' +
+            '\n- C档品质型：较高价位，高端体验' +
+            '\n- D档高端型：高价位，定制奢华体验' +
+            '\n\n【算法说明】使用K均值聚类将老年游客划分为四类用户画像（文化探寻者、自然热衷者、都市逃离者、活力养护者），再用余弦相似度量化用户与模式的匹配度' +
+            '\n\n【当前状态】' + currentResult +
+            '\n\n【注意事项】' +
+            '\n- 如果用户问朗读/语音相关，告诉他们点击聊天框下方的🔊按钮或快捷按钮中的"朗读推荐"' +
+            '\n- 如果用户问页面缩放，告诉他们使用聊天面板中的放大+/缩小-按钮' +
+            '\n- 回复控制在200字以内，简洁明了' +
+            '\n- 不要编造不存在的功能或数据';
+    }
+
     var allPages = document.querySelectorAll('.page');
     var detailContent = document.getElementById('detailContent');
     var backFromDetail = document.getElementById('backFromDetail');
@@ -836,99 +879,96 @@
         }
     }
 
-    function processAIQuery(query) {
+    function handleLocalCommand(query) {
         var q = query.trim().toLowerCase();
-        var response = '';
-
-        if (q.includes('介绍') && (q.includes('模式') || q.includes('文化') || q.includes('生态') || q.includes('休闲') || q.includes('医疗'))) {
-            response =
-                '<strong>📖 四种康养模式简介：</strong><br>' +
-                '📚 <b>文化+健康养生</b>：以文化浸润+身心养生为核心，融合历史文化、民俗风情、传统技艺与禅修静养。<br>' +
-                '🌱 <b>生态+健康养生</b>：以生态资源+身心修复为核心，依托森林、湿地、海滨、温泉等自然环境。<br>' +
-                '🛋 <b>休闲+健康养生</b>：以舒适度假、放松身心为核心，主打轻松舒适的轻度假形态。<br>' +
-                '🏥 <b>医疗+健康养生</b>：以专业医疗+健康管理为核心，提供健康体检、中医理疗等服务。<br>' +
-                '💡 想要了解某个模式的详细信息和消费档次，请点击左侧导航"🌿 养生方式"查看哦！';
-        } else if (q.includes('怎么') && (q.includes('用') || q.includes('使用') || q.includes('操作'))) {
-            response =
-                '<strong>❓ 平台使用指南：</strong><br>' +
-                '1. 点击左侧导航 <b>"📊 数据化选择"</b> 进入计算页面。<br>' +
-                '2. 输入您对文化、生态、休闲、医疗四方面的兴趣值（0-10分）。<br>' +
-                '3. 点击 <b>"🧮 快速计算"</b>，系统将智能匹配最适合您的康养模式。<br>' +
-                '4. 点击 <b>"📈 进入可视化分析"</b> 查看图表对比。<br>' +
-                '5. 在可视化页面选择折线图、饼状图或散点图查看详细对比。<br>' +
-                '💡 也可以点击左侧导航的 <b>"🌿 养生方式"</b> 浏览四种模式的图文介绍和消费档次！';
-        } else if (q.includes('导航') || q.includes('找到') || q.includes('界面') || q.includes('去哪')) {
-            response =
-                '<strong>🧲 快速导航：</strong><br>' +
-                '🏠 <b>主页</b> - 点击左侧导航"系统首页"<br>' +
-                '📖 <b>研究背景</b> - 点击左侧导航"研究背景"<br>' +
-                '🧲 <b>模式简介</b> - 点击左侧导航"模式简介"<br>' +
-                '🌿 <b>养生方式</b> - 点击左侧导航"养生方式"<br>' +
-                '📊 <b>数据化选择</b> - 点击左侧导航"数据化选择"<br>' +
-                '📈 <b>可视化分析</b> - 点击左侧导航"可视化分析"<br>' +
-                '💬 需要我直接带你跳转吗？告诉我你想去哪个页面！';
-        } else if (q.includes('结果') || q.includes('推荐') || q.includes('数据')) {
-            if (bestIdx !== null && simScores) {
-                var detail = modeDetail[bestIdx];
-                response =
-                    '<strong>📊 当前计算结果：</strong><br>' +
-                    modeNames.map(function(name, i) { return name + '：' + simScores[i].toFixed(4); }).join('<br>') + '<br>' +
-                    '<br>🌟 <b>推荐模式：' + modeNames[bestIdx] + '</b> (匹配度 ' + simScores[bestIdx].toFixed(4) + ')<br>' +
-                    '<br><strong>⚠ 推荐理由：</strong>' + detail.reason + '<br>' +
-                    '<strong>⚠ ' + detail.activities + '</strong><br>' +
-                    '<br><strong>💵 消费档次：</strong><br>' +
-                    detail.priceTiers.map(function(t) { return '<b>' + t.label + '</b>：' + t.price + ' - ' + t.detail; }).join('<br>');
-            } else {
-                response = '⚠ 暂无计算结果。请先前往左侧导航 <b>"📊 数据化选择"</b> 输入您的兴趣值并点击计算。需要我带你去吗？';
-            }
-        } else if (q.includes('朗读') || q.includes('读出') || q.includes('语音') || q.includes('扬声器')) {
+        if (q.includes('朗读') || q.includes('读出') || q.includes('语音播报')) {
             if (speaking) {
                 stopSpeaking();
-                response = '⏹ 已停止语音朗读。再次点击"朗读推荐"可重新朗读。';
+                return '⏹ 已停止语音朗读。再次点击"朗读推荐"可重新朗读。';
             } else {
                 if (bestIdx === null) {
-                    response = '⚠ 暂无推荐结果，请先完成数据化选择后再使用朗读功能。';
+                    return '⚠ 暂无推荐结果，请先完成数据化选择后再使用朗读功能。';
                 } else {
                     speakLastRecommendation();
-                    response = '🔊 正在朗读推荐内容！<br>>> 点击聊天框下方的 <b>⏹</b> 按钮可停止朗读。<br>>> 再次点击"朗读推荐"也可停止。';
+                    return '🔊 正在朗读推荐内容！点击聊天框下方的 ⏹ 按钮可停止朗读。';
                 }
             }
-        } else if (q.includes('放大') || q.includes('缩小') || q.includes('字体') || q.includes('页面缩放')) {
-            response = '🔍 您可以使用聊天面板中的 <b>"放大+"</b> 和 <b>"缩小-"</b> 按钮来调整页面字体大小，也可以点击 <b>"重置"</b> 恢复默认。试试看吧！';
-        } else if (q.includes('消费') || q.includes('价格') || q.includes('费用') || q.includes('档次') || q.includes('经济')) {
-            if (bestIdx !== null) {
-                var detail = modeDetail[bestIdx];
-                response =
-                    '<strong>💵 ' + modeNames[bestIdx] + ' 消费档次：</strong><br>' +
-                    detail.priceTiers.map(function(t) { return '<b>' + t.label + '</b>：' + t.price + '<br>→ ' + t.detail; }).join('<br>');
-            } else {
-                response = '💵 四种模式都有ABCD四个消费档次，涵盖经济型到高端型。请先在养生方式中查看各模式详情，或完成数据化选择后查看推荐模式的消费档次。';
-            }
-        } else if (q.includes('你好') || q.includes('嗨') || q.includes('hello') || q === '') {
-            response = '👋 你好呀！我是小旅，你的康养旅游智能助手！有什么我可以帮你的吗？试试点击上方的快捷按钮吧～';
-        } else {
-            response =
-                '✎️ 小旅收到了你的问题！我可以帮你：<br>' +
-                '📖 <b>介绍模式</b> - 了解四种康养模式<br>' +
-                '❓ <b>怎么使用</b> - 学习平台操作<br>' +
-                '🧲 <b>帮我导航</b> - 快速找到页面<br>' +
-                '📊 <b>查看结果</b> - 呈现数据推荐<br>' +
-                '🔊 <b>朗读推荐</b> - 语音播报结果<br>' +
-                '💵 <b>消费档次</b> - 查看ABCD档价格<br>' +
-                '🔍 <b>页面缩放</b> - 调整字体大小<br>' +
-                '请点击上方快捷按钮或输入关键词，小旅随时为你服务！';
         }
-        return response;
+        return null;
+    }
+
+    function callDeepSeekAPI(userMessage) {
+        chatHistory.push({ role: 'user', content: userMessage });
+
+        var messages = [{ role: 'system', content: buildSystemPrompt() }];
+        var recentHistory = chatHistory.slice(-10);
+        messages = messages.concat(recentHistory);
+
+        return fetch(deepseekApiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + deepseekApiKey
+            },
+            body: JSON.stringify({
+                model: 'deepseek-chat',
+                messages: messages,
+                max_tokens: 500,
+                temperature: 0.7,
+                stream: false
+            })
+        }).then(function(res) {
+            if (!res.ok) {
+                throw new Error('API请求失败: ' + res.status);
+            }
+            return res.json();
+        }).then(function(data) {
+            var reply = data.choices && data.choices[0] && data.choices[0].message
+                ? data.choices[0].message.content
+                : '抱歉，我暂时无法回答，请稍后再试。';
+            chatHistory.push({ role: 'assistant', content: reply });
+            if (chatHistory.length > 20) {
+                chatHistory = chatHistory.slice(-16);
+            }
+            return reply;
+        }).catch(function(err) {
+            chatHistory.pop();
+            return '⚠ 网络连接异常，请检查网络后重试。(' + err.message + ')';
+        });
     }
 
     function handleAIQuery(query) {
-        if (!query.trim()) return;
+        if (!query.trim() || isAiLoading) return;
         addChatMessage('user', query);
-        var response = processAIQuery(query);
-        setTimeout(function() {
-            addChatMessage('assistant', response);
-        }, 400);
         aiChatInput.value = '';
+
+        var localResponse = handleLocalCommand(query);
+        if (localResponse !== null) {
+            setTimeout(function() {
+                addChatMessage('assistant', localResponse);
+            }, 200);
+            return;
+        }
+
+        isAiLoading = true;
+        var loadingDiv = document.createElement('div');
+        loadingDiv.className = 'ai-msg assistant';
+        loadingDiv.id = 'aiLoadingMsg';
+        loadingDiv.innerHTML = '🤔 思考中<span class="loading-dots">...</span>';
+        aiChatBody.appendChild(loadingDiv);
+        aiChatBody.scrollTop = aiChatBody.scrollHeight;
+
+        callDeepSeekAPI(query).then(function(reply) {
+            var loadEl = document.getElementById('aiLoadingMsg');
+            if (loadEl) loadEl.remove();
+            isAiLoading = false;
+            var safeReply = reply
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/\n/g, '<br>');
+            addChatMessage('assistant', safeReply);
+        });
     }
 
     function toggleAIChat() {

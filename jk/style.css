@@ -1077,6 +1077,17 @@ canvas {
     border-bottom: 1px solid #f0f0e8;
 }
 
+.loading-dots {
+    display: inline-block;
+    animation: dotBlink 1.4s infinite both;
+}
+
+@keyframes dotBlink {
+    0%, 20% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
 .ai-zoom-controls span {
     font-size: 0.78rem;
     color: #6b8a5e;
