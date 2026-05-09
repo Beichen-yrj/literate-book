@@ -1,4 +1,4 @@
-﻿﻿(function() {
+﻿﻿﻿(function() {
 
     // 四种康养模式
     var modeNames = ["文化+健康养生", "生态+健康养生", "休闲+健康养生", "医疗+健康养生"];
@@ -1424,10 +1424,10 @@
         }
     }
 
-    cSlider.addEventListener('input', onSliderChange);
-    eSlider.addEventListener('input', onSliderChange);
-    lSlider.addEventListener('input', onSliderChange);
-    mSlider.addEventListener('input', onSliderChange);
+    if (cSlider) cSlider.addEventListener('input', onSliderChange);
+    if (eSlider) eSlider.addEventListener('input', onSliderChange);
+    if (lSlider) lSlider.addEventListener('input', onSliderChange);
+    if (mSlider) mSlider.addEventListener('input', onSliderChange);
 
     var sidePanel = document.getElementById('sidePanel');
     var sideHead = document.getElementById('sideHead');
