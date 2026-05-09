@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿(function() {
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿(function() {
 
     // 四种康养模式的名称
     var modeNames = ["文化+健康养生", "生态+健康养生", "休闲+健康养生", "医疗+健康养生"];
@@ -1354,37 +1354,37 @@
     }
     initNews();
 
-    var vCultureSlider = document.getElementById('vCultureSlider');
-    var vEcoSlider = document.getElementById('vEcoSlider');
-    var vLeisureSlider = document.getElementById('vLeisureSlider');
-    var vMedicalSlider = document.getElementById('vMedicalSlider');
-    var vCultureVal = document.getElementById('vCultureVal');
-    var vEcoVal = document.getElementById('vEcoVal');
-    var vLeisureVal = document.getElementById('vLeisureVal');
-    var vMedicalVal = document.getElementById('vMedicalVal');
-    var visualSidebarResult = document.getElementById('visualSidebarResult');
+    var cSlider = document.getElementById('cSlider');
+    var eSlider = document.getElementById('eSlider');
+    var lSlider = document.getElementById('lSlider');
+    var mSlider = document.getElementById('mSlider');
+    var cVal = document.getElementById('cVal');
+    var eVal = document.getElementById('eVal');
+    var lVal = document.getElementById('lVal');
+    var mVal = document.getElementById('mVal');
+    var sideResult = document.getElementById('sideResult');
     var currentChartType = null;
 
     function syncSlidersFromUserVec() {
         if (usrVec) {
-            vCultureSlider.value = usrVec[0];
-            vEcoSlider.value = usrVec[1];
-            vLeisureSlider.value = usrVec[2];
-            vMedicalSlider.value = usrVec[3];
-            vCultureVal.textContent = usrVec[0];
-            vEcoVal.textContent = usrVec[1];
-            vLeisureVal.textContent = usrVec[2];
-            vMedicalVal.textContent = usrVec[3];
+            cSlider.value = usrVec[0];
+            eSlider.value = usrVec[1];
+            lSlider.value = usrVec[2];
+            mSlider.value = usrVec[3];
+            cVal.textContent = usrVec[0];
+            eVal.textContent = usrVec[1];
+            lVal.textContent = usrVec[2];
+            mVal.textContent = usrVec[3];
         }
         updateVisualSidebarResult();
     }
 
     function updateVisualSidebarResult() {
         var vec = [
-            parseFloat(vCultureSlider.value),
-            parseFloat(vEcoSlider.value),
-            parseFloat(vLeisureSlider.value),
-            parseFloat(vMedicalSlider.value)
+            parseFloat(cSlider.value),
+            parseFloat(eSlider.value),
+            parseFloat(lSlider.value),
+            parseFloat(mSlider.value)
         ];
         var sims = modeFeatures.map(function(mf) { return cosineSim(vec, mf); });
         var maxSim = -1;
@@ -1392,7 +1392,7 @@
         sims.forEach(function(s, i) {
             if (s > maxSim) { maxSim = s; maxIdx = i; }
         });
-        visualSidebarResult.innerHTML =
+        sideResult.innerHTML =
             '<strong>🌟 推荐模式：</strong>' + modeNames[maxIdx] + '<br>' +
             '<strong>匹配度：</strong>' + maxSim.toFixed(4) + '<br>' +
             sims.map(function(s, i) {
@@ -1401,17 +1401,17 @@
     }
 
     function onSliderChange() {
-        vCultureVal.textContent = parseFloat(vCultureSlider.value).toFixed(1);
-        vEcoVal.textContent = parseFloat(vEcoSlider.value).toFixed(1);
-        vLeisureVal.textContent = parseFloat(vLeisureSlider.value).toFixed(1);
-        vMedicalVal.textContent = parseFloat(vMedicalSlider.value).toFixed(1);
+        cVal.textContent = parseFloat(cSlider.value).toFixed(1);
+        eVal.textContent = parseFloat(eSlider.value).toFixed(1);
+        lVal.textContent = parseFloat(lSlider.value).toFixed(1);
+        mVal.textContent = parseFloat(mSlider.value).toFixed(1);
         updateVisualSidebarResult();
 
         var vec = [
-            parseFloat(vCultureSlider.value),
-            parseFloat(vEcoSlider.value),
-            parseFloat(vLeisureSlider.value),
-            parseFloat(vMedicalSlider.value)
+            parseFloat(cSlider.value),
+            parseFloat(eSlider.value),
+            parseFloat(lSlider.value),
+            parseFloat(mSlider.value)
         ];
         usrVec = vec;
         var sims = modeFeatures.map(function(mf) { return cosineSim(vec, mf); });
@@ -1428,33 +1428,26 @@
         }
     }
 
-    vCultureSlider.addEventListener('input', onSliderChange);
-    vEcoSlider.addEventListener('input', onSliderChange);
-    vLeisureSlider.addEventListener('input', onSliderChange);
-    vMedicalSlider.addEventListener('input', onSliderChange);
+    cSlider.addEventListener('input', onSliderChange);
+    eSlider.addEventListener('input', onSliderChange);
+    lSlider.addEventListener('input', onSliderChange);
+    mSlider.addEventListener('input', onSliderChange);
 
-    var visualSidebar = document.getElementById('visualSidebar');
-    var visualSidebarFloatBtn = document.getElementById('visualSidebarFloatBtn');
-    var visualSidebarToggle = document.getElementById('visualSidebarToggle');
-    var visualSidebarArrow = document.getElementById('visualSidebarArrow');
-    var visualSidebarExpanded = false;
+    var sidePanel = document.getElementById('sidePanel');
+    var sideHead = document.getElementById('sideHead');
+    var sideExpanded = false;
 
-    function toggleVisualSidebar() {
-        visualSidebarExpanded = !visualSidebarExpanded;
-        if (visualSidebarExpanded) {
-            visualSidebar.classList.add('expanded');
-            visualSidebarArrow.classList.remove('collapsed');
+    function toggleSidePanel() {
+        sideExpanded = !sideExpanded;
+        if (sideExpanded) {
+            sidePanel.classList.add('expanded');
         } else {
-            visualSidebar.classList.remove('expanded');
-            visualSidebarArrow.classList.add('collapsed');
+            sidePanel.classList.remove('expanded');
         }
     }
 
-    if (visualSidebarFloatBtn) {
-        visualSidebarFloatBtn.addEventListener('click', toggleVisualSidebar);
-    }
-    if (visualSidebarToggle) {
-        visualSidebarToggle.addEventListener('click', toggleVisualSidebar);
+    if (sideHead) {
+        sideHead.addEventListener('click', toggleSidePanel);
     }
 
     var origRenderChart = renderChart;

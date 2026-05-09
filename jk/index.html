@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.5">
@@ -9,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- 背景装饰 -->
     <div class="bg-decor">
@@ -18,7 +20,7 @@
     <!-- AI助手悬浮按钮区域 -->
     <div class="ai-assistant-wrapper" id="aiAssistantWrapper">
         <!-- 气泡提示 -->
-        <div class="ai-bubble" id="aiBubble">💬 不会就来问小旅哦！</div>
+        <div class="ai-bubble" id="aiBubble">不会就来问小旅助手哦！</div>
         <!-- 可爱的小旅头像按钮 -->
         <div class="ai-avatar-btn" id="aiAvatarBtn" title="点击召唤小旅助手">
             <div class="ai-leaf"></div>
@@ -36,16 +38,16 @@
     <div class="ai-chat-panel" id="aiChatPanel">
         <!-- 聊天面板头部 -->
         <div class="ai-chat-header">
-            <span class="ai-header-icon">🤖</span> 小旅 · AI助手
-            <button class="ai-chat-close" id="aiChatClose">✕</button>
+            小旅 - 康旅AI小助手
+            <button class="ai-chat-close" id="aiChatClose">x</button>
         </div>
         <!-- 快捷按钮区域 -->
         <div class="ai-quick-btns" id="aiQuickBtns">
-            <button class="ai-quick-btn" data-q="介绍模式">📖 介绍模式</button>
-            <button class="ai-quick-btn" data-q="怎么使用">❓ 怎么使用</button>
-            <button class="ai-quick-btn" data-q="帮我导航">🧲 帮我导航</button>
-            <button class="ai-quick-btn" data-q="查看结果">📊 查看结果</button>
-            <button class="ai-quick-btn" data-q="朗读推荐">🔊 朗读推荐</button>
+            <button class="ai-quick-btn" data-q="介绍模式">介绍模式</button>
+            <button class="ai-quick-btn" data-q="怎么使用">怎么使用</button>
+            <button class="ai-quick-btn" data-q="帮我导航">帮我导航</button>
+            <button class="ai-quick-btn" data-q="查看结果">查看结果</button>
+            <button class="ai-quick-btn" data-q="朗读推荐">朗读推荐</button>
         </div>
         <!-- 缩放控制区域 -->
         <div class="ai-zoom-controls">
@@ -243,32 +245,29 @@
                     <h1 class="page-title">📈 可视化呈现图分析</h1>
                     <p class="page-subtitle">多图表对比，精准推荐可视化呈现</p>
                 </div>
-                <!-- 兴趣调节悬浮按钮 -->
-                <button class="visual-sidebar-float-btn" id="visualSidebarFloatBtn" title="展开兴趣调节">❯</button>
                 <!-- 兴趣调节侧边栏 -->
-                <div class="visual-sidebar-left" id="visualSidebar">
-                    <div class="visual-sidebar-header" id="visualSidebarToggle">
-                        <span class="visual-sidebar-arrow visual-sidebar-arrow-left" id="visualSidebarArrow">❮</span>
-                        <div class="visual-sidebar-title">🎛 兴趣调节</div>
+                <div class="side-panel" id="sidePanel">
+                    <div class="side-head" id="sideHead">
+                        <div class="side-title">🎛 兴趣调节</div>
                     </div>
-                    <div class="visual-sidebar-body" id="visualSidebarBody">
-                        <div class="visual-slider-group">
-                            <label>📚 文化：<span id="vCultureVal">8</span></label>
-                            <input type="range" id="vCultureSlider" min="0" max="10" step="0.1" value="8" class="visual-slider">
+                    <div class="side-body" id="sideBody">
+                        <div class="slider-g">
+                            <label>📚 文化：<span id="cVal">8</span></label>
+                            <input type="range" id="cSlider" min="0" max="10" step="0.1" value="8" class="range-slider">
                         </div>
-                        <div class="visual-slider-group">
-                            <label>🌱 生态：<span id="vEcoVal">3</span></label>
-                            <input type="range" id="vEcoSlider" min="0" max="10" step="0.1" value="3" class="visual-slider">
+                        <div class="slider-g">
+                            <label>🌱 生态：<span id="eVal">3</span></label>
+                            <input type="range" id="eSlider" min="0" max="10" step="0.1" value="3" class="range-slider">
                         </div>
-                        <div class="visual-slider-group">
-                            <label>🛋 休闲：<span id="vLeisureVal">2</span></label>
-                            <input type="range" id="vLeisureSlider" min="0" max="10" step="0.1" value="2" class="visual-slider">
+                        <div class="slider-g">
+                            <label>🛋 休闲：<span id="lVal">2</span></label>
+                            <input type="range" id="lSlider" min="0" max="10" step="0.1" value="2" class="range-slider">
                         </div>
-                        <div class="visual-slider-group">
-                            <label>🏥 医疗：<span id="vMedicalVal">5</span></label>
-                            <input type="range" id="vMedicalSlider" min="0" max="10" step="0.1" value="5" class="visual-slider">
+                        <div class="slider-g">
+                            <label>🏥 医疗：<span id="mVal">5</span></label>
+                            <input type="range" id="mSlider" min="0" max="10" step="0.1" value="5" class="range-slider">
                         </div>
-                        <div class="visual-sidebar-result" id="visualSidebarResult"></div>
+                        <div class="side-result" id="sideResult"></div>
                     </div>
                 </div>
                 <!-- 图表展示区域 -->

@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿/* 基础样式重置 */
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿/* 基础样式重置 */
 * {
     margin: 0;
     padding: 0;
@@ -535,7 +535,7 @@ body {
     width: 100%;
 }
 
-.visual-sidebar-left {
+.side-panel {
     position: fixed;
     left: 0;
     top: 0;
@@ -552,46 +552,15 @@ body {
     transform: translateX(-100%);
 }
 
-.visual-sidebar-left.expanded {
+.side-panel.expanded {
     transform: translateX(0);
 }
 
-.visual-sidebar-left .visual-sidebar-header {
+.side-panel .side-head {
     border-radius: 0 16px 0 0;
 }
 
-.visual-sidebar-float-btn {
-    position: fixed;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 36px;
-    height: 60px;
-    background: linear-gradient(135deg, #4a8b4a, #2d5a2d);
-    border: none;
-    border-radius: 0 12px 12px 0;
-    cursor: pointer;
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 4px 0 12px rgba(0,0,0,0.25);
-    transition: all 0.3s ease;
-    color: #fff;
-    font-size: 1.2rem;
-    opacity: 1;
-}
-
-.visual-sidebar-float-btn:hover {
-    width: 42px;
-    box-shadow: 4px 0 16px rgba(0,0,0,0.25);
-}
-
-.visual-sidebar-float-btn.hidden {
-    display: none;
-}
-
-.visual-sidebar-header {
+.side-head {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -603,11 +572,11 @@ body {
     overflow: hidden;
 }
 
-.visual-sidebar-header:hover {
+.side-head:hover {
     background: rgba(74, 139, 74, 0.05);
 }
 
-.visual-sidebar-title {
+.side-title {
     font-size: 0.95rem;
     font-weight: 700;
     color: #1a2e1a;
@@ -615,18 +584,7 @@ body {
     transition: opacity 0.2s;
 }
 
-.visual-sidebar-arrow-left {
-    font-size: 1.1rem;
-    color: #4a8b4a;
-    transition: transform 0.35s ease;
-    flex-shrink: 0;
-}
-
-.visual-sidebar-arrow-left.collapsed {
-    transform: rotate(180deg);
-}
-
-.visual-sidebar-body {
+.side-body {
     padding: 14px;
     overflow: hidden;
     transition: opacity 0.25s ease;
@@ -687,7 +645,7 @@ body {
     border: none;
 }
 
-.visual-sidebar-result {
+.side-result {
     margin-top: 16px;
     padding-top: 12px;
     border-top: 2px solid #e8f0e0;
@@ -696,7 +654,7 @@ body {
     line-height: 1.6;
 }
 
-.visual-sidebar-result strong {
+.side-result strong {
     color: #2d6a2d;
 }
 
@@ -1610,13 +1568,9 @@ body {
         flex-direction: column;
     }
 
-    .visual-sidebar-left {
+    .side-panel {
         width: 260px;
         border-radius: 0 16px 16px 0;
-    }
-
-    .visual-sidebar-float-btn {
-        display: flex !important;
     }
 
     .chart-container {
