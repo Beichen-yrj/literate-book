@@ -1303,35 +1303,35 @@
             tagClass: 'news-tag-industry',
             title: '文旅部：推动康养旅游高质量发展，打造一批国家级康养基地',
             date: '2025-03',
-            url: 'https://www.mct.gov.cn/'
+            url: 'https://zwgk.mct.gov.cn/zfxxgkml/zhgl/jytadf/202111/t20211104_928754.html'
         },
         {
             tag: '健康',
             tagClass: 'news-tag-health',
             title: '国家卫健委：老龄健康促进行动持续推进，中医养生融入社区',
             date: '2025-02',
-            url: 'https://www.nhc.gov.cn/'
+            url: 'https://www.nhc.gov.cn/lljks/c100158/202412/a4ddde4785364e789845032258591b7a.shtml'
         },
         {
             tag: '养老',
             tagClass: 'news-tag-aging',
             title: '民政部：全国养老服务体系建设取得新进展，社区养老覆盖率达90%',
             date: '2025-04',
-            url: 'https://www.mca.gov.cn/'
+            url: 'https://www.mca.gov.cn/n2623/n2684/n2694/c1662004999980010553/content.html'
         },
         {
             tag: '行业',
             tagClass: 'news-tag-industry',
             title: '2025中国康养旅游市场规模预计突破千亿，生态疗愈成新热点',
             date: '2025-05',
-            url: 'https://www.ctaweb.org.cn/'
+            url: 'http://www.qingdao.gov.cn/zwgk/xxgk/fgw/ywfl/shfz/202507/t20250725_9912138.shtml'
         },
         {
             tag: '政策',
             tagClass: 'news-tag-policy',
             title: '十四五老龄事业规划：构建居家社区机构相协调的养老服务体系',
             date: '2024-12',
-            url: 'https://www.gov.cn/'
+            url: 'https://www.mca.gov.cn/n152/n166/c45259/content.html'
         }
     ];
 
