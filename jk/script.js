@@ -197,7 +197,7 @@
                     html += `
                 <div class="tier-card">
                   <span class="tier-label ${t.tierClass}">${t.label}</span>
-                  <div class="tier-price">[费用] ${t.price}</div>
+                  <div class="tier-price">💰 ${t.price}</div>
                   <div class="tier-detail">${t.detail}</div>
                 </div>`;
                 });
@@ -213,7 +213,7 @@
                 ${img.note || ''}
                 <img src="${img.src}" alt="${img.alt}" loading="lazy" decoding="async" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='flex';">
                 <div class="img-fallback" style="display:none;width:100%;max-width:320px;height:220px;background:#e8f0dd;border-radius:20px;align-items:center;justify-content:center;color:#7a9a60;font-size:0.9rem;text-align:center;padding:20px;">
-                  [图片] ${img.alt}<br><small>（图片待添加）</small>
+                  🖼 ${img.alt}<br><small>（图片待添加）</small>
                 </div>`;
                 });
                 html += '</div>';
@@ -257,15 +257,15 @@
             function displayResult(result) {
                 const { sims, bestIdx } = result;
                 const detail = modeDetail[bestIdx];
-                let html = `<strong>[计算] 余弦相似度计算结果：</strong><br>`;
+                let html = `<strong>🧮 余弦相似度计算结果：</strong><br>`;
                 modeNames.forEach(function(name, i) {
                     html += `${name}：${sims[i].toFixed(4)}<br>`;
                 });
                 html +=
-                    `<br>[推荐] <span style="color:#1e4a1e; font-weight:bold;">为您推荐：${modeNames[bestIdx]} (匹配度 ${sims[bestIdx].toFixed(4)})</span>`;
+                    `<br>🌟 <span style="color:#1e4a1e; font-weight:bold;">为您推荐：${modeNames[bestIdx]} (匹配度 ${sims[bestIdx].toFixed(4)})</span>`;
                 html +=
-                    `<br><br><strong>[重点] 推荐理由：</strong>${detail.reason}<br><strong>[重点] ${detail.activities}</strong>`;
-                html += `<br><br><strong>[价格] 消费档次推荐：</strong>`;
+                    `<br><br><strong>⚠ 推荐理由：</strong>${detail.reason}<br><strong>⚠ ${detail.activities}</strong>`;
+                html += `<br><br><strong>💵 消费档次推荐：</strong>`;
                 html += renderPriceTiers(detail.priceTiers);
                 calcDisplay.innerHTML = html;
                 calcDisplay.style.display = 'block';
@@ -449,10 +449,10 @@
                 <div id="chartExplanation" class="result-box" style="margin-top:10px;"></div>
                 <div id="recommendSummaryBox" class="recommend-summary"></div>
                 <div class="button-row">
-                  <button class="btn-return-chart" id="backToChartSelection">[重选] 重新选择图表</button>
-                  <button class="btn-export-excel" id="exportExcelChart">[导出] 导出 Excel</button>
-                  <button class="btn-export-word" id="exportWordChart">[文档] 导出 Word</button>
-                  <button class="btn-return-home" id="backToHomeFromB">[返回] 返回主页</button>
+                  <button class="btn-return-chart" id="backToChartSelection">🔄 重新选择图表</button>
+                  <button class="btn-export-excel" id="exportExcelChart">📤 导出 Excel</button>
+                  <button class="btn-export-word" id="exportWordChart">📄 导出 Word</button>
+                  <button class="btn-return-home" id="backToHomeFromB">↩ 返回主页</button>
                 </div>
               `;
                 }
@@ -467,10 +467,10 @@
               <div id="chartExplanation" class="result-box" style="margin-top:15px;"></div>
               <div id="recommendSummaryBox" class="recommend-summary"></div>
               <div class="button-row">
-                <button class="btn-return-chart" id="backToChartSelection">[重选] 重新选择图表</button>
-                <button class="btn-export-excel" id="exportExcelChart">[导出] 导出 Excel</button>
-                <button class="btn-export-word" id="exportWordChart">[文档] 导出 Word</button>
-                <button class="btn-return-home" id="backToHomeFromB">[返回] 返回主页</button>
+                <button class="btn-return-chart" id="backToChartSelection">🔄 重新选择图表</button>
+                <button class="btn-export-excel" id="exportExcelChart">📤 导出 Excel</button>
+                <button class="btn-export-word" id="exportWordChart">📄 导出 Word</button>
+                <button class="btn-return-home" id="backToHomeFromB">↩ 返回主页</button>
               </div>
             `;
             }
@@ -525,7 +525,7 @@
                         }
                     });
                     document.getElementById('chartExplanation').innerHTML =
-                        `<strong>[饼图] 饼图解读：</strong>左侧为用户兴趣占比（多彩自然色），右侧为推荐模式特征占比（大地暖色系），颜色对比鲜明且结构相似度极高。`;
+                        `<strong>🥧 饼图解读：</strong>左侧为用户兴趣占比（多彩自然色），右侧为推荐模式特征占比（大地暖色系），颜色对比鲜明且结构相似度极高。`;
                 } else {
                     ensureStandardChartLayout();
                     const canvas = document.getElementById('myChart');
@@ -548,7 +548,7 @@
                             options: { responsive: true, maintainAspectRatio: false }
                         });
                         document.getElementById('chartExplanation').innerHTML =
-                            `<strong>[折线] 折线图解读：</strong>绿色实线代表您的兴趣分布，橙色虚线为推荐模式的特征。两者在关键维度上高度重合。`;
+                            `<strong>📉 折线图解读：</strong>绿色实线代表您的兴趣分布，橙色虚线为推荐模式的特征。两者在关键维度上高度重合。`;
                     } else if (chartType === 'scatter') {
                         myChart = new Chart(ctx, {
                             type: 'scatter',
@@ -598,15 +598,15 @@
                             }
                         });
                         document.getElementById('chartExplanation').innerHTML =
-                            `<strong>[散点] 散点图解读：</strong>绿色圆点为您，橙色三角为推荐模式，位置越接近匹配越佳。`;
+                            `<strong>⚪ 散点图解读：</strong>绿色圆点为您，橙色三角为推荐模式，位置越接近匹配越佳。`;
                     }
                 }
 
                 const summaryEl = document.getElementById('recommendSummaryBox');
                 if (summaryEl) {
                     summaryEl.innerHTML =
-                        `<strong>[重点] 最终推荐：${modeNames[bestModeIdx]}</strong><br><em>适合人群：${detail.who}</em><br><strong>推荐理由：</strong>${detail.reason}<br><strong>${detail.activities}</strong>`;
-                    summaryEl.innerHTML += `<br><br><strong>[价格] 消费档次推荐：</strong>`;
+                        `<strong>⚠ 最终推荐：${modeNames[bestModeIdx]}</strong><br><em>适合人群：${detail.who}</em><br><strong>推荐理由：</strong>${detail.reason}<br><strong>${detail.activities}</strong>`;
+                    summaryEl.innerHTML += `<br><br><strong>💵 消费档次推荐：</strong>`;
                     summaryEl.innerHTML += renderPriceTiers(detail.priceTiers);
 
                     summaryEl.setAttribute('data-recommend-text',
@@ -804,49 +804,49 @@
                 if (q.includes('介绍') && (q.includes('模式') || q.includes('文化') || q.includes('生态') || q.includes(
                         '休闲') || q.includes('医疗'))) {
                     response = `
-                <strong>[介绍] 四种康养模式简介：</strong><br>
-                [文化] <b>文化+健康养生</b>：以文化浸润+身心养生为核心，融合历史文化、民俗风情、传统技艺与禅修静养。<br>
-                [生态] <b>生态+健康养生</b>：以生态资源+身心修复为核心，依托森林、湿地、海滨、温泉等自然环境。<br>
-                [休闲] <b>休闲+健康养生</b>：以舒适度假、放松身心为核心，主打轻松舒适的轻度假形态。<br>
-                [医疗] <b>医疗+健康养生</b>：以专业医疗+健康管理为核心，提供健康体检、中医理疗等服务。<br>
+                <strong>📖 四种康养模式简介：</strong><br>
+                📚 <b>文化+健康养生</b>：以文化浸润+身心养生为核心，融合历史文化、民俗风情、传统技艺与禅修静养。<br>
+                🌱 <b>生态+健康养生</b>：以生态资源+身心修复为核心，依托森林、湿地、海滨、温泉等自然环境。<br>
+                🛋 <b>休闲+健康养生</b>：以舒适度假、放松身心为核心，主打轻松舒适的轻度假形态。<br>
+                🏥 <b>医疗+健康养生</b>：以专业医疗+健康管理为核心，提供健康体检、中医理疗等服务。<br>
                 💡 想要了解某个模式的详细信息和消费档次，请点击主页的"🌿 养生方式"查看哦！
               `;
                 } else if (q.includes('怎么') && (q.includes('用') || q.includes('使用') || q.includes('操作'))) {
                     response = `
-                <strong>[帮助] 平台使用指南：</strong><br>
-                1. 点击主页 <b>"[数据] 康养模式数据化选择"</b> 进入计算页面。<br>
+                <strong>❓ 平台使用指南：</strong><br>
+                1. 点击主页 <b>"📊 康养模式数据化选择"</b> 进入计算页面。<br>
                 2. 输入您对文化、生态、休闲、医疗四方面的兴趣值（0-10分）。<br>
-                3. 点击 <b>"[计算] 快速计算"</b>，系统将智能匹配最适合您的康养模式。<br>
-                4. 点击 <b>"[散点] 进入可视化分析"</b> 查看图表对比。<br>
+                3. 点击 <b>"🧮 快速计算"</b>，系统将智能匹配最适合您的康养模式。<br>
+                4. 点击 <b>"⚪ 进入可视化分析"</b> 查看图表对比。<br>
                 5. 在可视化页面选择折线图、饼状图或散点图查看详细对比。<br>
                 💡 也可以点击主页的 <b>"🌿 养生方式"</b> 浏览四种模式的图文介绍和消费档次！
               `;
                 } else if (q.includes('导航') || q.includes('找到') || q.includes('界面') || q.includes('去哪')) {
                     response = `
-                <strong>[导航] 快速导航：</strong><br>
+                <strong>🧲 快速导航：</strong><br>
                 🏠 <b>主页</b> - 点击左上角返回按钮或"返回主页"<br>
-                [数据] <b>数据化选择</b> - 点击主页绿色卡片"康养模式数据化选择"<br>
-                [图表] <b>可视化分析</b> - 点击主页橙色卡片"可视化呈现图分析"<br>
+                📊 <b>数据化选择</b> - 点击主页绿色卡片"康养模式数据化选择"<br>
+                📈 <b>可视化分析</b> - 点击主页橙色卡片"可视化呈现图分析"<br>
                 🌿 <b>养生方式详情</b> - 点击主页顶部"🌿 养生方式"按钮<br>
-                [介绍] <b>研究背景</b> - 点击主页顶部"[介绍] 研究背景"按钮<br>
-                [导航] <b>模式简介</b> - 点击主页顶部"[导航] 模式简介"按钮<br>
+                📖 <b>研究背景</b> - 点击主页顶部"📖 研究背景"按钮<br>
+                🧲 <b>模式简介</b> - 点击主页顶部"🧲 模式简介"按钮<br>
                 💬 需要我直接带你跳转吗？告诉我你想去哪个页面！
               `;
                 } else if (q.includes('结果') || q.includes('推荐') || q.includes('数据')) {
                     if (bestIdx !== null && simScores) {
                         const detail = modeDetail[bestIdx];
                         response = `
-                  <strong>[数据] 当前计算结果：</strong><br>
+                  <strong>📊 当前计算结果：</strong><br>
                   ${modeNames.map(function(name, i) { return name + '：' + simScores[i].toFixed(4); }).join('<br>')}<br>
-                  <br>[推荐] <b>推荐模式：${modeNames[bestIdx]}</b> (匹配度 ${simScores[bestIdx].toFixed(4)})<br>
-                  <br><strong>[重点] 推荐理由：</strong>${detail.reason}<br>
-                  <strong>[重点] ${detail.activities}</strong><br>
-                  <br><strong>[价格] 消费档次：</strong><br>
+                  <br>🌟 <b>推荐模式：${modeNames[bestIdx]}</b> (匹配度 ${simScores[bestIdx].toFixed(4)})<br>
+                  <br><strong>⚠ 推荐理由：</strong>${detail.reason}<br>
+                  <strong>⚠ ${detail.activities}</strong><br>
+                  <br><strong>💵 消费档次：</strong><br>
                   ${detail.priceTiers.map(function(t) { return '<b>' + t.label + '</b>：' + t.price + ' - ' + t.detail; }).join('<br>')}
                 `;
                     } else {
                         response =
-                            '[注意] 暂无计算结果。请先前往 <b>"[数据] 康养模式数据化选择"</b> 输入您的兴趣值并点击计算。需要我带你去吗？';
+                            '⚠ 暂无计算结果。请先前往 <b>"📊 康养模式数据化选择"</b> 输入您的兴趣值并点击计算。需要我带你去吗？';
                     }
                 } else if (q.includes('朗读') || q.includes('读出') || q.includes('语音') || q.includes('扬声器')) {
                     if (speaking) {
@@ -854,7 +854,7 @@
                         response = '⏹ 已停止语音朗读。再次点击"朗读推荐"可重新朗读。';
                     } else {
                         if (bestIdx === null) {
-                            response = '[注意] 暂无推荐结果，请先完成数据化选择后再使用朗读功能。';
+                            response = '⚠ 暂无推荐结果，请先完成数据化选择后再使用朗读功能。';
                         } else {
                             speakLastRecommendation();
                             response = '🔊 正在朗读推荐内容！<br>>> 点击聊天框下方的 <b>⏹</b> 按钮可停止朗读。<br>>> 再次点击"朗读推荐"也可停止。<br>💡 朗读适配说明：<br>1. 优先使用浏览器内置语音（Chrome/Edge/Safari）<br>2. 如内置语音不可用，自动切换在线语音<br>3. 如在线语音也不可用，内容将复制到剪贴板<br>4. 请确保设备音量已开启';
@@ -862,31 +862,31 @@
                     }
                 } else if (q.includes('放大') || q.includes('缩小') || q.includes('字体') || q.includes('页面缩放')) {
                     response =
-                        '[缩放] 您可以使用聊天面板中的 <b>"放大+"</b> 和 <b>"缩小-"</b> 按钮来调整页面字体大小，也可以点击 <b>"重置"</b> 恢复默认。试试看吧！';
+                        '🔍 您可以使用聊天面板中的 <b>"放大+"</b> 和 <b>"缩小-"</b> 按钮来调整页面字体大小，也可以点击 <b>"重置"</b> 恢复默认。试试看吧！';
                 } else if (q.includes('消费') || q.includes('价格') || q.includes('费用') || q.includes('档次') || q.includes(
                         '经济')) {
                     if (bestIdx !== null) {
                         const detail = modeDetail[bestIdx];
                         response =
-                            `<strong>[价格] ${modeNames[bestIdx]} 消费档次：</strong><br>` +
+                            `<strong>💵 ${modeNames[bestIdx]} 消费档次：</strong><br>` +
                             detail.priceTiers.map(function(t) { return '<b>' + t.label + '</b>：' + t.price + '<br>→ ' + t.detail; }).join('<br>');
                     } else {
                         response =
-                            '[价格] 四种模式都有ABCD四个消费档次，涵盖经济型到高端型。请先在养生方式中查看各模式详情，或完成数据化选择后查看推荐模式的消费档次。';
+                            '💵 四种模式都有ABCD四个消费档次，涵盖经济型到高端型。请先在养生方式中查看各模式详情，或完成数据化选择后查看推荐模式的消费档次。';
                     }
                 } else if (q.includes('你好') || q.includes('嗨') || q.includes('hello') || q === '') {
                     response =
-                        '[你好] 你好呀！我是小旅，你的康养旅游智能助手！有什么我可以帮你的吗？试试点击上方的快捷按钮吧～';
+                        '👋 你好呀！我是小旅，你的康养旅游智能助手！有什么我可以帮你的吗？试试点击上方的快捷按钮吧～';
                 } else {
                     response = `
-                [思考] 小旅收到了你的问题！我可以帮你：<br>
-                [介绍] <b>介绍模式</b> - 了解四种康养模式<br>
-                [帮助] <b>怎么使用</b> - 学习平台操作<br>
-                [导航] <b>帮我导航</b> - 快速找到页面<br>
-                [数据] <b>查看结果</b> - 呈现数据推荐<br>
+                ✎️ 小旅收到了你的问题！我可以帮你：<br>
+                📖 <b>介绍模式</b> - 了解四种康养模式<br>
+                ❓ <b>怎么使用</b> - 学习平台操作<br>
+                🧲 <b>帮我导航</b> - 快速找到页面<br>
+                📊 <b>查看结果</b> - 呈现数据推荐<br>
                 🔊 <b>朗读推荐</b> - 语音播报结果<br>
-                [价格] <b>消费档次</b> - 查看ABCD档价格<br>
-                [缩放] <b>页面缩放</b> - 调整字体大小<br>
+                💵 <b>消费档次</b> - 查看ABCD档价格<br>
+                🔍 <b>页面缩放</b> - 调整字体大小<br>
                 请点击上方快捷按钮或输入关键词，小旅随时为你服务！
               `;
                 }
@@ -972,14 +972,14 @@
 
             document.getElementById('btnResearchBg').addEventListener('click', function() {
                 navStack = ['research'];
-                showDetail('[介绍] 研究背景',
+                showDetail('📖 研究背景',
                     `当前，全球人口老龄化进程不断加快，中国作为人口大国，老龄化态势尤为突出，已正式步入中度老龄化社会。截至近年，我国60岁及以上老年人口突破3亿，占总人口比例超五分之一，且老年人口规模持续扩大，高龄化、空巢化、失能化趋势日益明显，传统家庭养老与公共养老服务体系面临严峻压力，养老供需矛盾逐渐凸显。与此同时，国家将积极应对人口老龄化上升为国家战略，陆续出台多项政策扶持银发经济发展，从顶层设计为产业发展指明方向，推动养老服务、健康医疗、适老用品、老年文旅等领域规范化、规模化发展。随着社会经济发展，老年群体消费观念逐步转变，从基础的生存型消费，向健康养生、精神文化、智慧养老等品质型、多元化消费升级，消费潜力持续释放。银发经济不仅是破解养老难题、保障老年群体福祉的重要抓手，更成为新时代扩大内需、培育经济发展新动能的关键领域，蕴含巨大市场空间。在此背景下，深入研究银发经济的发展现状、产业痛点与未来趋势，具有极强的现实意义与实践价值。`,
                     true, 'research');
             });
 
             document.getElementById('btnModeIntro').addEventListener('click', function() {
                 navStack = ['modeIntro'];
-                showDetail('[导航] 模式简介',
+                showDetail('🧲 模式简介',
                     `本文构建文化+、生态+、休闲+、医疗+四类康养旅游模式，并运用K均值聚类+余弦相似度实现用户画像与旅游模式精准匹配。K均值聚类算法以文化体验、自然疗愈、休闲享乐、健康需求为维度，对样本数据迭代聚类，将老年游客划分为自然热衷者、都市逃离者、文化探寻者、活力养护者四类用户画像，实现需求群体精准细分。余弦相似度算法用于量化匹配度，先将用户特征与模式特征转化为四维向量，再通过向量夹角计算相似度，取值范围为[-1,1]，数值越接近1表示匹配度越高。基于算法计算，自然热衷者匹配生态+模式，都市逃离者匹配休闲+模式，文化探寻者匹配文化+模式，活力养护者匹配医疗+模式。该方法以数据驱动实现供需精准对接，有效解决康养旅游同质化、供需错配问题，为老年康养旅游精准服务提供科学支撑。`,
                     true, 'modeIntro');
             });
@@ -989,22 +989,22 @@
                 const html = `
             <div class="mode-cards">
               <div class="mode-card" data-mode-index="0">
-                <span class="card-title">[文化] 文化体验旅游模式</span>
+                <span class="card-title">📚 文化体验旅游模式</span>
                 <div class="card-desc">文化体验康养旅游以文化浸润+身心养生为核心，融合历史文化、民俗风情、传统技艺与禅修静养等内容，依托文化古迹、传统村落、非遗资源打造沉浸式体验场景。</div>
                 <div class="card-hint">>> 点击查看图片展示 & 消费档次</div>
               </div>
               <div class="mode-card" data-mode-index="1">
-                <span class="card-title">[生态] 自然疗愈旅游模式</span>
+                <span class="card-title">🌱 自然疗愈旅游模式</span>
                 <div class="card-desc">自然疗愈康养旅游以生态资源+身心修复为核心，依托森林、湿地、海滨、温泉等自然生态环境，突出自然环境的疗愈功效与生态互动体验。</div>
                 <div class="card-hint">>> 点击查看图片展示 & 消费档次</div>
               </div>
               <div class="mode-card" data-mode-index="2">
-                <span class="card-title">[休闲] 休闲享乐旅游模式</span>
+                <span class="card-title">🛋 休闲享乐旅游模式</span>
                 <div class="card-desc">休闲享乐康养旅游以舒适度假、放松身心为核心，面向追求高品质旅居体验的老年群体，主打轻松舒适的轻度假形态。</div>
                 <div class="card-hint">>> 点击查看图片展示 & 消费档次</div>
               </div>
               <div class="mode-card" data-mode-index="3">
-                <span class="card-title">[医疗] 健康需求旅游模式</span>
+                <span class="card-title">🏥 健康需求旅游模式</span>
                 <div class="card-desc">健康需求康养旅游以专业医疗+健康管理为核心，面向存在健康维护、康复疗养或亚健康调理需求的老年群体，提供健康体检、中医理疗等服务。</div>
                 <div class="card-hint">>> 点击查看图片展示 & 消费档次</div>
               </div>
@@ -1024,12 +1024,12 @@
                       <h3 style="color:#2d4a2c; margin-bottom:10px;">${modeNames[modeIdx]}</h3>
                       <p style="color:#3a5535; line-height:1.7;">${detail.reason}</p>
                       <p style="color:#3a5535; line-height:1.7;"><strong>${detail.activities}</strong></p>
-                      <h4 style="color:#4a6b3a; margin-top:18px;">[图片] 图片展示</h4>
+                      <h4 style="color:#4a6b3a; margin-top:18px;">🖼 图片展示</h4>
                       ${imgHtml}
                       <p style="font-size:0.8rem; color:#999; margin-top:4px;">
-                        [注意] 图片为本地jpg文件，请根据代码注释将图片放置到对应路径。若图片未加载，将显示占位提示。
+                        ⚠ 图片为本地jpg文件，请根据代码注释将图片放置到对应路径。若图片未加载，将显示占位提示。
                       </p>
-                      <h4 style="color:#4a6b3a; margin-top:18px;">[价格] 消费档次推荐</h4>
+                      <h4 style="color:#4a6b3a; margin-top:18px;">💵 消费档次推荐</h4>
                       ${tiersHtml}
                     `;
                             showDetail('🌿 ' + modeNames[modeIdx] + ' · 详情', contentHtml,
@@ -1047,22 +1047,22 @@
                     const html = `
                 <div class="mode-cards">
                   <div class="mode-card" data-mode-index="0">
-                    <span class="card-title">[文化] 文化体验旅游模式</span>
+                    <span class="card-title">📚 文化体验旅游模式</span>
                     <div class="card-desc">文化体验康养旅游以文化浸润+身心养生为核心，融合历史文化、民俗风情、传统技艺与禅修静养等内容。</div>
                     <div class="card-hint">>> 点击查看图片展示 & 消费档次</div>
                   </div>
                   <div class="mode-card" data-mode-index="1">
-                    <span class="card-title">[生态] 自然疗愈旅游模式</span>
+                    <span class="card-title">🌱 自然疗愈旅游模式</span>
                     <div class="card-desc">自然疗愈康养旅游以生态资源+身心修复为核心，依托森林、湿地、海滨、温泉等自然生态环境。</div>
                     <div class="card-hint">>> 点击查看图片展示 & 消费档次</div>
                   </div>
                   <div class="mode-card" data-mode-index="2">
-                    <span class="card-title">[休闲] 休闲享乐旅游模式</span>
+                    <span class="card-title">🛋 休闲享乐旅游模式</span>
                     <div class="card-desc">休闲享乐康养旅游以舒适度假、放松身心为核心，主打轻松舒适的轻度假形态。</div>
                     <div class="card-hint">>> 点击查看图片展示 & 消费档次</div>
                   </div>
                   <div class="mode-card" data-mode-index="3">
-                    <span class="card-title">[医疗] 健康需求旅游模式</span>
+                    <span class="card-title">🏥 健康需求旅游模式</span>
                     <div class="card-desc">健康需求康养旅游以专业医疗+健康管理为核心，提供健康体检、中医理疗等服务。</div>
                     <div class="card-hint">>> 点击查看图片展示 & 消费档次</div>
                   </div>
@@ -1086,10 +1086,10 @@
                           <h3 style="color:#2d4a2c; margin-bottom:10px;">${modeNames[modeIdx]}</h3>
                           <p style="color:#3a5535; line-height:1.7;">${detail.reason}</p>
                           <p style="color:#3a5535; line-height:1.7;"><strong>${detail.activities}</strong></p>
-                          <h4 style="color:#4a6b3a; margin-top:18px;">[图片] 图片展示</h4>
+                          <h4 style="color:#4a6b3a; margin-top:18px;">🖼 图片展示</h4>
                           ${imgHtml}
-                          <p style="font-size:0.8rem; color:#999; margin-top:4px;">[注意] 图片为本地jpg文件，请根据代码注释将图片放置到对应路径。</p>
-                          <h4 style="color:#4a6b3a; margin-top:18px;">[价格] 消费档次推荐</h4>
+                          <p style="font-size:0.8rem; color:#999; margin-top:4px;">⚠ 图片为本地jpg文件，请根据代码注释将图片放置到对应路径。</p>
+                          <h4 style="color:#4a6b3a; margin-top:18px;">💵 消费档次推荐</h4>
                           ${tiersHtml}
                         `;
                                 showDetail('🌿 ' + modeNames[modeIdx] +
