@@ -271,7 +271,7 @@
     function showModeDetail(modeIdx) {
         var detail = modeDetail[modeIdx];
         var imgHtml = renderImageGallery(detail.images);
-        var tiersHtml = renderPriceTiers(detail.priceTiers);
+        var tiersHtml = renderPriceTiers(detail.priceTiers, modeNames[modeIdx]);
         var contentHtml =
             '<h3 style="color:#2d4a2c; margin-bottom:10px;">' + modeNames[modeIdx] + '</h3>' +
             '<p style="color:#3a5535; line-height:1.7;">' + detail.reason + '</p>' +
@@ -290,7 +290,7 @@
         backFromDetail.textContent = '<< 返回养生方式';
     }
 
-    function renderPriceTiers(tiers) {
+    function renderPriceTiers(tiers, modeName) {
         var html = '<div class="price-tiers">';
         tiers.forEach(function(t) {
             html +=
@@ -365,7 +365,7 @@
         html += '<br>🌟 <span style="color:#1e4a1e; font-weight:bold;">为您推荐：' + modeNames[best] + ' (匹配度 ' + sims[best].toFixed(4) + ')</span>';
         html += '<br><br><strong>⚠ 推荐理由：</strong>' + detail.reason + '<br><strong>⚠ ' + detail.activities + '</strong>';
         html += '<br><br><strong>💵 消费档次推荐：</strong>';
-        html += renderPriceTiers(detail.priceTiers);
+        html += renderPriceTiers(detail.priceTiers, modeNames[best]);
         calcResultDisplay.innerHTML = html;
         calcResultDisplay.style.display = 'block';
         gotoVisualBtn.style.display = 'inline-block';
@@ -734,7 +734,7 @@
             summaryEl.innerHTML =
                 '<strong>⚠ 最终推荐：' + modeNames[bestModeIdx] + '</strong><br><em>适合人群：' + detail.who + '</em><br><strong>推荐理由：</strong>' + detail.reason + '<br><strong>' + detail.activities + '</strong>';
             summaryEl.innerHTML += '<br><br><strong>💵 消费档次推荐：</strong>';
-            summaryEl.innerHTML += renderPriceTiers(detail.priceTiers);
+            summaryEl.innerHTML += renderPriceTiers(detail.priceTiers, modeNames[bestModeIdx]);
 
             summaryEl.setAttribute('data-recommend-text',
                 '最终推荐' + modeNames[bestModeIdx] + '。适合人群：' + detail.who + '。' + detail.reason + ' ' + detail.activities);
@@ -1467,14 +1467,15 @@
     };
 
     var origRenderPriceTiers = renderPriceTiers;
-    renderPriceTiers = function(tiers) {
+    renderPriceTiers = function(tiers, modeName) {
+        var mName = modeName || '康养旅游';
         var html = '<div class="price-tiers">';
         tiers.forEach(function(t, idx) {
             html +=
-                '<div class="tier-card tier-card-clickable" data-tier-label="' + t.label + '" data-tier-price="' + t.price + '" data-tier-detail="' + t.detail.replace(/"/g, '&quot;') + '">' +
-                  '<div class="tier-tooltip">💬 点击问我了解详情！</div>' +
+                '<div class="tier-card tier-card-clickable" data-tier-label="' + t.label + '" data-tier-price="' + t.price + '" data-tier-detail="' + t.detail.replace(/"/g, '&quot;') + '" data-tier-mode="' + mName + '">' +
+                  '<div class="tier-tooltip">&#x1F4AC; 点击问我了解详情！</div>' +
                   '<span class="tier-label ' + t.tierClass + '">' + t.label + '</span>' +
-                  '<div class="tier-price">💰 ' + t.price + '</div>' +
+                  '<div class="tier-price">&#x1F4B0; ' + t.price + '</div>' +
                   '<div class="tier-detail">' + t.detail + '</div>' +
                 '</div>';
         });
@@ -1485,16 +1486,68 @@
                     var label = this.getAttribute('data-tier-label');
                     var price = this.getAttribute('data-tier-price');
                     var detail = this.getAttribute('data-tier-detail');
-                    var question = '请详细介绍一下' + label + '（价格：' + price + '），包括适合人群、具体体验内容和注意事项';
+                    var mode = this.getAttribute('data-tier-mode');
+                    var question = '我想了解' + mode + '的' + label + '（价格：' + price + '），请给出详细建议';
                     if (!aiChatPanel.classList.contains('open')) {
                         aiChatPanel.classList.add('open');
                         aiBubble.style.display = 'none';
                     }
-                    handleAIQuery(question);
+                    addChatMessage('user', question);
+                    aiChatInput.value = '';
+                    var localReply = buildTierLocalReply(mode, label, price, detail);
+                    setTimeout(function() {
+                        addChatMessage('assistant', localReply);
+                        var loadingDiv = document.createElement('div');
+                        loadingDiv.className = 'ai-msg assistant';
+                        loadingDiv.id = 'tierLoadingMsg';
+                        loadingDiv.innerHTML = '&#x1F916; 小旅正在思考补充建议<span class="loading-dots">...</span>';
+                        aiChatBody.appendChild(loadingDiv);
+                        aiChatBody.scrollTop = aiChatBody.scrollHeight;
+                    }, 300);
+                    isAiLoading = true;
+                    callDeepSeekAPI(question).then(function(reply) {
+                        isAiLoading = false;
+                        var loadEl = document.getElementById('tierLoadingMsg');
+                        if (loadEl) loadEl.remove();
+                        var safeReply = reply
+                            .replace(/&/g, '&amp;')
+                            .replace(/</g, '&lt;')
+                            .replace(/>/g, '&gt;')
+                            .replace(/\n/g, '<br>');
+                        addChatMessage('assistant', '&#x1F916; 小旅补充建议：<br>' + safeReply);
+                    }).catch(function() {
+                        isAiLoading = false;
+                        var loadEl = document.getElementById('tierLoadingMsg');
+                        if (loadEl) loadEl.remove();
+                    });
                 };
             });
         }, 200);
         return html;
     };
+
+    function buildTierLocalReply(mode, label, price, detail) {
+        var tierType = '';
+        if (label.indexOf('A') !== -1) tierType = '经济型';
+        else if (label.indexOf('B') !== -1) tierType = '舒适型';
+        else if (label.indexOf('C') !== -1) tierType = '品质型';
+        else if (label.indexOf('D') !== -1) tierType = '高端型';
+
+        var tips = '';
+        if (tierType === '经济型') {
+            tips = '&#x1F4A1; 小旅提示：经济型方案性价比高，适合预算有限但想体验康养旅游的朋友。建议提前关注景区优惠活动，选择淡季出行更划算哦！';
+        } else if (tierType === '舒适型') {
+            tips = '&#x1F4A1; 小旅提示：舒适型方案在品质和价格间取得良好平衡，适合追求一定品质又不想花费太多的朋友。建议选择口碑好的中高端民宿或度假村！';
+        } else if (tierType === '品质型') {
+            tips = '&#x1F4A1; 小旅提示：品质型方案提供高端体验，适合注重服务品质和深度体验的朋友。建议提前预约热门项目，确保行程顺利！';
+        } else if (tierType === '高端型') {
+            tips = '&#x1F4A1; 小旅提示：高端型方案提供尊享定制服务，适合追求极致体验的朋友。建议联系专业旅行顾问进行个性化定制，让每一刻都物超所值！';
+        }
+
+        return '&#x1F33F; <strong>' + mode + ' · ' + label + '</strong><br><br>' +
+            '&#x1F4B0; 价格区间：' + price + '<br><br>' +
+            '&#x1F4CB; 具体内容：' + detail + '<br><br>' +
+            tips;
+    }
 
 })();
