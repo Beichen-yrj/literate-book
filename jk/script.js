@@ -1,4 +1,4 @@
-﻿﻿(function() {
+﻿(function() {
 
     var modeNames = ["文化+健康养生", "生态+健康养生", "休闲+健康养生", "医疗+健康养生"];
     var modeFeatures = [
