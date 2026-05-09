@@ -1,4 +1,4 @@
-﻿(function() {
+﻿﻿(function() {
 
     var modeNames = ["文化+健康养生", "生态+健康养生", "休闲+健康养生", "医疗+健康养生"];
     var modeFeatures = [
@@ -1412,22 +1412,30 @@
     vLeisureSlider.addEventListener('input', onSliderChange);
     vMedicalSlider.addEventListener('input', onSliderChange);
 
-    var visualSidebarToggle = document.getElementById('visualSidebarToggle');
     var visualSidebar = document.getElementById('visualSidebar');
+    var visualSidebarFloatBtn = document.getElementById('visualSidebarFloatBtn');
+    var visualSidebarToggle = document.getElementById('visualSidebarToggle');
     var visualSidebarArrow = document.getElementById('visualSidebarArrow');
-    var visualSidebarCollapsed = true;
+    var visualSidebarExpanded = false;
 
-    if (visualSidebarToggle && visualSidebar) {
-        visualSidebarToggle.addEventListener('click', function() {
-            visualSidebarCollapsed = !visualSidebarCollapsed;
-            if (visualSidebarCollapsed) {
-                visualSidebar.classList.add('collapsed');
-                visualSidebarArrow.classList.add('collapsed');
-            } else {
-                visualSidebar.classList.remove('collapsed');
-                visualSidebarArrow.classList.remove('collapsed');
-            }
-        });
+    function toggleVisualSidebar() {
+        visualSidebarExpanded = !visualSidebarExpanded;
+        if (visualSidebarExpanded) {
+            visualSidebar.classList.add('expanded');
+            visualSidebarArrow.classList.remove('collapsed');
+            visualSidebarFloatBtn.classList.add('hidden');
+        } else {
+            visualSidebar.classList.remove('expanded');
+            visualSidebarArrow.classList.add('collapsed');
+            visualSidebarFloatBtn.classList.remove('hidden');
+        }
+    }
+
+    if (visualSidebarFloatBtn) {
+        visualSidebarFloatBtn.addEventListener('click', toggleVisualSidebar);
+    }
+    if (visualSidebarToggle) {
+        visualSidebarToggle.addEventListener('click', toggleVisualSidebar);
     }
 
     var origRenderChart = renderChart;
