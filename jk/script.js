@@ -1,4 +1,4 @@
-﻿(function() {
+﻿﻿(function() {
 
     var modeNames = ["文化+健康养生", "生态+健康养生", "休闲+健康养生", "医疗+健康养生"];
     var modeFeatures = [
@@ -1423,11 +1423,9 @@
         if (visualSidebarExpanded) {
             visualSidebar.classList.add('expanded');
             visualSidebarArrow.classList.remove('collapsed');
-            visualSidebarFloatBtn.classList.add('hidden');
         } else {
             visualSidebar.classList.remove('expanded');
             visualSidebarArrow.classList.add('collapsed');
-            visualSidebarFloatBtn.classList.remove('hidden');
         }
     }
 
