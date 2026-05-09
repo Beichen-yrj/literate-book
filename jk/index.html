@@ -10,12 +10,16 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- 背景装饰 -->
     <div class="bg-decor">
         <span></span><span></span><span></span>
     </div>
 
+    <!-- AI助手悬浮按钮区域 -->
     <div class="ai-assistant-wrapper" id="aiAssistantWrapper">
+        <!-- 气泡提示 -->
         <div class="ai-bubble" id="aiBubble">💬 不会就来问小旅哦！</div>
+        <!-- 可爱的小旅头像按钮 -->
         <div class="ai-avatar-btn" id="aiAvatarBtn" title="点击召唤小旅助手">
             <div class="ai-leaf"></div>
             <div class="ai-face">
@@ -28,11 +32,14 @@
         </div>
     </div>
 
+    <!-- AI聊天面板 -->
     <div class="ai-chat-panel" id="aiChatPanel">
+        <!-- 聊天面板头部 -->
         <div class="ai-chat-header">
             <span class="ai-header-icon">🤖</span> 小旅 · AI助手
             <button class="ai-chat-close" id="aiChatClose">✕</button>
         </div>
+        <!-- 快捷按钮区域 -->
         <div class="ai-quick-btns" id="aiQuickBtns">
             <button class="ai-quick-btn" data-q="介绍模式">📖 介绍模式</button>
             <button class="ai-quick-btn" data-q="怎么使用">❓ 怎么使用</button>
@@ -40,17 +47,20 @@
             <button class="ai-quick-btn" data-q="查看结果">📊 查看结果</button>
             <button class="ai-quick-btn" data-q="朗读推荐">🔊 朗读推荐</button>
         </div>
+        <!-- 缩放控制区域 -->
         <div class="ai-zoom-controls">
             <span>🔍 页面缩放：</span>
             <button class="ai-zoom-btn" id="aiZoomIn">放大+</button>
             <button class="ai-zoom-btn" id="aiZoomOut">缩小-</button>
             <button class="ai-zoom-btn" id="aiZoomReset">重置</button>
         </div>
+        <!-- 聊天消息区域 -->
         <div class="ai-chat-body" id="aiChatBody">
             <div class="ai-msg assistant">
                 👋 你好呀！我是<strong>小旅</strong>，你的康养旅游智能助手！<br>你可以点击上方快捷按钮，或直接输入问题来问我哦～
             </div>
         </div>
+        <!-- 聊天输入区域 -->
         <div class="ai-chat-footer">
             <input type="text" id="aiChatInput" placeholder="输入问题，小旅帮你解答...">
             <button id="aiSendBtn">发送</button>
@@ -58,13 +68,17 @@
         </div>
     </div>
 
+    <!-- 主布局区域 -->
     <div class="app-layout">
+        <!-- 左侧导航栏 -->
         <aside class="sidebar" id="sidebar">
+            <!-- 导航栏头部 -->
             <div class="sidebar-header">
                 <div class="sidebar-logo">🌿</div>
                 <div class="sidebar-brand">康养旅游系统</div>
                 <div class="sidebar-sub">石家庄铁道大学</div>
             </div>
+            <!-- 导航菜单 -->
             <nav class="sidebar-nav">
                 <div class="nav-section-title">功能导航</div>
                 <a class="nav-item active" id="navHome" data-page="homePage">
@@ -93,20 +107,26 @@
                     <span class="nav-text">可视化分析</span>
                 </a>
             </nav>
+            <!-- 导航栏底部 -->
             <div class="sidebar-footer">
                 <div class="sidebar-version">v2.0 · 健康养生旅游模式系统</div>
             </div>
         </aside>
 
+        <!-- 移动端菜单切换按钮 -->
         <button class="sidebar-toggle" id="sidebarToggle">☰</button>
 
+        <!-- 主内容区域 -->
         <main class="main-content">
+            <!-- 首页 -->
             <div id="homePage" class="page active">
+                <!-- 打字机效果标题 -->
                 <div class="home-typewriter-area">
                     <h1 class="home-typewriter-text" id="homeTypewriterText"></h1>
                     <span class="typewriter-cursor" id="typewriterCursor">|</span>
                 </div>
 
+                <!-- 图片轮播区域 -->
                 <div class="home-carousel" id="homeCarousel">
                     <div class="carousel-track" id="carouselTrack"></div>
                     <button class="carousel-btn carousel-prev" id="carouselPrev">❮</button>
@@ -114,6 +134,7 @@
                     <div class="carousel-dots" id="carouselDots"></div>
                 </div>
 
+                <!-- 首页功能卡片 -->
                 <div class="home-cards">
                     <div class="home-card card-research" id="homeCardResearch">
                         <div class="home-card-icon">📖</div>
@@ -157,12 +178,14 @@
                     </div>
                 </div>
 
+                <!-- 新闻动态区域 -->
                 <div class="home-news-section">
                     <h2 class="home-news-title">📰 康养旅游 · 行业动态</h2>
                     <div class="home-news-grid" id="homeNewsGrid"></div>
                 </div>
             </div>
 
+            <!-- 研究背景页面 -->
             <div id="researchPage" class="page">
                 <div class="page-header">
                     <h1 class="page-title">📖 研究背景</h1>
@@ -170,6 +193,7 @@
                 <div class="content-card" id="researchContent"></div>
             </div>
 
+            <!-- 模式简介页面 -->
             <div id="modeIntroPage" class="page">
                 <div class="page-header">
                     <h1 class="page-title">🧲 模式简介</h1>
@@ -177,6 +201,7 @@
                 <div class="content-card" id="modeIntroContent"></div>
             </div>
 
+            <!-- 养生方式页面 -->
             <div id="healthStylePage" class="page">
                 <div class="page-header">
                     <h1 class="page-title">🌿 养生方式</h1>
@@ -184,22 +209,27 @@
                 <div class="content-card" id="healthStyleContent"></div>
             </div>
 
+            <!-- 数据化选择页面 -->
             <div id="dataSelectPage" class="page">
                 <div class="page-header">
                     <h1 class="page-title">📊 康养模式数据化选择</h1>
                     <p class="page-subtitle">输入您对各方面的兴趣值，系统将智能匹配最适合的康养模式</p>
                 </div>
                 <div class="content-card">
+                    <!-- 兴趣值输入区域 -->
                     <div class="input-grid">
                         <div class="param-group"><label>📚 文化兴趣</label><input type="number" id="cultureInput" value="8" min="0" max="10" step="0.1" placeholder="0-10"><span class="score-hint">满分10分</span></div>
                         <div class="param-group"><label>🌱 生态兴趣</label><input type="number" id="ecoInput" value="3" min="0" max="10" step="0.1" placeholder="0-10"><span class="score-hint">满分10分</span></div>
                         <div class="param-group"><label>🛋 休闲兴趣</label><input type="number" id="leisureInput" value="2" min="0" max="10" step="0.1" placeholder="0-10"><span class="score-hint">满分10分</span></div>
                         <div class="param-group"><label>🏥 医疗兴趣</label><input type="number" id="medicalInput" value="5" min="0" max="10" step="0.1" placeholder="0-10"><span class="score-hint">满分10分</span></div>
                     </div>
+                    <!-- 计算按钮区域 -->
                     <div class="action-bar">
                         <button class="btn-primary" id="quickCalcBtn">🧮 快速计算</button>
                     </div>
+                    <!-- 计算结果展示区域 -->
                     <div id="calcResultDisplay" class="result-box" style="display:none;"></div>
+                    <!-- 导出和跳转按钮 -->
                     <div class="action-bar" style="margin-top:15px;">
                         <button id="exportExcelFromCalcBtn" class="btn-secondary" style="display:none;">📤 导出 Excel</button>
                         <button id="gotoVisualBtn" class="btn-accent" style="display:none;">📈 进入可视化分析</button>
@@ -207,12 +237,15 @@
                 </div>
             </div>
 
+            <!-- 可视化分析页面 -->
             <div id="visualPage" class="page">
                 <div class="page-header">
                     <h1 class="page-title">📈 可视化呈现图分析</h1>
                     <p class="page-subtitle">多图表对比，精准推荐可视化呈现</p>
                 </div>
+                <!-- 兴趣调节悬浮按钮 -->
                 <button class="visual-sidebar-float-btn" id="visualSidebarFloatBtn" title="展开兴趣调节">❯</button>
+                <!-- 兴趣调节侧边栏 -->
                 <div class="visual-sidebar-left" id="visualSidebar">
                     <div class="visual-sidebar-header" id="visualSidebarToggle">
                         <span class="visual-sidebar-arrow visual-sidebar-arrow-left" id="visualSidebarArrow">❮</span>
@@ -238,7 +271,9 @@
                         <div class="visual-sidebar-result" id="visualSidebarResult"></div>
                     </div>
                 </div>
+                <!-- 图表展示区域 -->
                 <div class="content-card" style="margin-left: 10px;">
+                    <!-- 图表类型选择 -->
                     <div id="chartSelectionArea">
                         <div class="chart-selector">
                             <button class="chart-type-btn" data-chart="line">📉 折线图对比</button>
@@ -246,10 +281,12 @@
                             <button class="chart-type-btn" data-chart="scatter">🔌 散点图展示</button>
                         </div>
                     </div>
+                    <!-- 图表渲染区域 -->
                     <div id="chartDisplayArea" style="display:none;"></div>
                 </div>
             </div>
 
+            <!-- 详情页面 -->
             <div id="detailPage" class="page">
                 <div class="page-header">
                     <div class="breadcrumb" id="breadcrumb"></div>

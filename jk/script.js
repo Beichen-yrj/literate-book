@@ -1,6 +1,13 @@
-﻿﻿(function() {
+﻿﻿﻿﻿﻿﻿﻿(function() {
 
+    // 四种康养模式的名称
     var modeNames = ["文化+健康养生", "生态+健康养生", "休闲+健康养生", "医疗+健康养生"];
+
+    // 四种模式的核心特征向量 [文化, 生态, 休闲, 医疗]
+    // 文化模式: 强文化, 弱生态, 弱休闲, 中等医疗
+    // 生态模式: 弱文化, 强生态, 弱休闲, 弱医疗
+    // 休闲模式: 弱文化, 中等生态, 强休闲, 弱医疗
+    // 医疗模式: 弱文化, 弱生态, 弱休闲, 强医疗
     var modeFeatures = [
         [9, 1, 0, 2],
         [2, 8, 1, 1],
@@ -8,6 +15,7 @@
         [1, 1, 1, 9]
     ];
 
+    // 各模式的详细信息，包括适合人群、推荐理由、活动、费用档次、图片
     var modeDetail = {
         0: {
             who: "文化探寻者",
@@ -313,6 +321,9 @@
         return html;
     }
 
+    // 余弦相似度计算函数
+    // 通过计算两个向量的夹角余弦值来衡量相似程度
+    // 返回值范围 [-1, 1]，值越大表示越相似
     function cosineSim(vecA, vecB) {
         var dot = 0, magA = 0, magB = 0;
         for (var i = 0; i < vecA.length; i++) {
@@ -326,6 +337,8 @@
         return dot / (magA * magB);
     }
 
+    // 执行兴趣匹配计算
+    // 读取用户输入的四维兴趣向量，与各模式特征向量计算余弦相似度
     function performCalculation() {
         var culture = parseFloat(document.getElementById('cultureInput').value);
         var eco = parseFloat(document.getElementById('ecoInput').value);
@@ -929,6 +942,8 @@
         return null;
     }
 
+    // 调用DeepSeek API进行智能对话
+    // 将用户消息和历史对话发送给DeepSeek模型，返回AI回复
     function callDeepSeekAPI(userMessage) {
         chatHistory.push({ role: 'user', content: userMessage });
 
@@ -1163,6 +1178,7 @@
         }, 1000);
     }
 
+    // 首页打字机效果的文字列表
     var typewriterTexts = [
         '实时化旅游模式系统',
         '健康养生 · 智能推荐',
@@ -1176,6 +1192,8 @@
     var typewriterEl = document.getElementById('homeTypewriterText');
     var cursorEl = document.getElementById('typewriterCursor');
 
+    // 打字机效果核心函数
+    // 实现打字->停顿->删除->下一条的打字机动画效果
     function typewriterTick() {
         var currentText = typewriterTexts[typewriterIndex];
         if (!isDeleting) {
@@ -1203,6 +1221,7 @@
     }
     typewriterTick();
 
+    // 轮播图数据列表
     var carouselImages = [
         { src: 'photos/1.jpg', caption: '🌿 康养旅游 · 自然疗愈之旅' },
         { src: 'photos/2.jpg', caption: '📚 文化体验 · 历史名城探秘' },
@@ -1223,6 +1242,8 @@
     var carouselDots = document.getElementById('carouselDots');
     var autoSlideTimer = null;
 
+    // 初始化轮播图组件
+    // 动态生成幻灯片和指示点，并启动自动播放
     function initCarousel() {
         var trackHtml = '';
         var dotsHtml = '';
