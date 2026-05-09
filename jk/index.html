@@ -102,10 +102,18 @@
 
         <main class="main-content">
             <div id="homePage" class="page active">
-                <div class="page-header">
-                    <h1 class="page-title">健康养生旅游模式可视化选择</h1>
-                    <p class="page-subtitle">基于余弦相似度算法的康养旅游模式智能推荐系统</p>
+                <div class="home-typewriter-area">
+                    <h1 class="home-typewriter-text" id="homeTypewriterText"></h1>
+                    <span class="typewriter-cursor" id="typewriterCursor">|</span>
                 </div>
+
+                <div class="home-carousel" id="homeCarousel">
+                    <div class="carousel-track" id="carouselTrack"></div>
+                    <button class="carousel-btn carousel-prev" id="carouselPrev">❮</button>
+                    <button class="carousel-btn carousel-next" id="carouselNext">❯</button>
+                    <div class="carousel-dots" id="carouselDots"></div>
+                </div>
+
                 <div class="home-cards">
                     <div class="home-card card-research" id="homeCardResearch">
                         <div class="home-card-icon">📖</div>
@@ -147,6 +155,11 @@
                         </div>
                         <div class="home-card-arrow">›</div>
                     </div>
+                </div>
+
+                <div class="home-news-section">
+                    <h2 class="home-news-title">📰 康养旅游 · 行业动态</h2>
+                    <div class="home-news-grid" id="homeNewsGrid"></div>
                 </div>
             </div>
 
@@ -199,15 +212,39 @@
                     <h1 class="page-title">📈 可视化呈现图分析</h1>
                     <p class="page-subtitle">多图表对比，精准推荐可视化呈现</p>
                 </div>
-                <div class="content-card">
-                    <div id="chartSelectionArea">
-                        <div class="chart-selector">
-                            <button class="chart-type-btn" data-chart="line">📉 折线图对比</button>
-                            <button class="chart-type-btn" data-chart="pie">🥧 饼状图分布</button>
-                            <button class="chart-type-btn" data-chart="scatter">🔌 散点图展示</button>
+                <div class="visual-layout">
+                    <div class="visual-sidebar" id="visualSidebar">
+                        <div class="visual-sidebar-title">🎛 实时调节兴趣值</div>
+                        <div class="visual-slider-group">
+                            <label>📚 文化兴趣：<span id="vCultureVal">8</span></label>
+                            <input type="range" id="vCultureSlider" min="0" max="10" step="0.1" value="8" class="visual-slider">
+                        </div>
+                        <div class="visual-slider-group">
+                            <label>🌱 生态兴趣：<span id="vEcoVal">3</span></label>
+                            <input type="range" id="vEcoSlider" min="0" max="10" step="0.1" value="3" class="visual-slider">
+                        </div>
+                        <div class="visual-slider-group">
+                            <label>🛋 休闲兴趣：<span id="vLeisureVal">2</span></label>
+                            <input type="range" id="vLeisureSlider" min="0" max="10" step="0.1" value="2" class="visual-slider">
+                        </div>
+                        <div class="visual-slider-group">
+                            <label>🏥 医疗兴趣：<span id="vMedicalVal">5</span></label>
+                            <input type="range" id="vMedicalSlider" min="0" max="10" step="0.1" value="5" class="visual-slider">
+                        </div>
+                        <div class="visual-sidebar-result" id="visualSidebarResult"></div>
+                    </div>
+                    <div class="visual-main">
+                        <div class="content-card">
+                            <div id="chartSelectionArea">
+                                <div class="chart-selector">
+                                    <button class="chart-type-btn" data-chart="line">📉 折线图对比</button>
+                                    <button class="chart-type-btn" data-chart="pie">🥧 饼状图分布</button>
+                                    <button class="chart-type-btn" data-chart="scatter">🔌 散点图展示</button>
+                                </div>
+                            </div>
+                            <div id="chartDisplayArea" style="display:none;"></div>
                         </div>
                     </div>
-                    <div id="chartDisplayArea" style="display:none;"></div>
                 </div>
             </div>
 

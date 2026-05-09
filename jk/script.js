@@ -1131,4 +1131,289 @@
         }, 1000);
     }
 
+    var typewriterTexts = [
+        '实时化旅游模式系统',
+        '健康养生 · 智能推荐',
+        '康养旅游 · 数据驱动',
+        '余弦相似度 · 精准匹配',
+        '银发经济 · 品质生活'
+    ];
+    var typewriterIndex = 0;
+    var charIndex = 0;
+    var isDeleting = false;
+    var typewriterEl = document.getElementById('homeTypewriterText');
+    var cursorEl = document.getElementById('typewriterCursor');
+
+    function typewriterTick() {
+        var currentText = typewriterTexts[typewriterIndex];
+        if (!isDeleting) {
+            charIndex++;
+            typewriterEl.textContent = currentText.substring(0, charIndex);
+            if (charIndex === currentText.length) {
+                setTimeout(function() {
+                    isDeleting = true;
+                    typewriterTick();
+                }, 2000);
+                return;
+            }
+            setTimeout(typewriterTick, 120);
+        } else {
+            charIndex--;
+            typewriterEl.textContent = currentText.substring(0, charIndex);
+            if (charIndex === 0) {
+                isDeleting = false;
+                typewriterIndex = (typewriterIndex + 1) % typewriterTexts.length;
+                setTimeout(typewriterTick, 500);
+                return;
+            }
+            setTimeout(typewriterTick, 60);
+        }
+    }
+    typewriterTick();
+
+    var carouselImages = [
+        { src: 'photos/1.jpg', caption: '🌿 康养旅游 · 自然疗愈之旅' },
+        { src: 'photos/2.jpg', caption: '📚 文化体验 · 历史名城探秘' },
+        { src: 'photos/5.jpg', caption: '🌱 生态养生 · 森林氧吧漫步' },
+        { src: 'photos/8.jpg', caption: '🛋 休闲度假 · 温泉SPA享乐' },
+        { src: 'photos/11.jpg', caption: '🏥 健康管理 · 中医理疗养生' },
+        { src: 'photos/3.jpg', caption: '🏞 银发旅游 · 品质生活新方式' },
+        { src: 'photos/6.jpg', caption: '🌊 滨海康养 · 海天一色' },
+        { src: 'photos/9.jpg', caption: '♨ 温泉疗养 · 身心舒展' },
+        { src: 'photos/12.jpg', caption: '💊 医养结合 · 科学养生' },
+        { src: 'photos/4.jpg', caption: '🏯 非遗体验 · 文化传承' },
+        { src: 'photos/7.jpg', caption: '🏔 生态度假 · 回归自然' },
+        { src: 'photos/10.jpg', caption: '🍽 美食之旅 · 舌尖养生' },
+        { src: 'photos/13.jpg', caption: '🧘 康养理疗 · 活力焕新' }
+    ];
+    var currentSlide = 0;
+    var carouselTrack = document.getElementById('carouselTrack');
+    var carouselDots = document.getElementById('carouselDots');
+    var autoSlideTimer = null;
+
+    function initCarousel() {
+        var trackHtml = '';
+        var dotsHtml = '';
+        carouselImages.forEach(function(img, i) {
+            trackHtml +=
+                '<div class="carousel-slide">' +
+                    '<img src="' + img.src + '" alt="' + img.caption + '" loading="lazy" decoding="async">' +
+                    '<div class="carousel-slide-overlay">' + img.caption + '</div>' +
+                '</div>';
+            dotsHtml += '<button class="carousel-dot' + (i === 0 ? ' active' : '') + '" data-index="' + i + '"></button>';
+        });
+        carouselTrack.innerHTML = trackHtml;
+        carouselDots.innerHTML = dotsHtml;
+        startAutoSlide();
+    }
+
+    function goToSlide(index) {
+        currentSlide = index;
+        if (currentSlide >= carouselImages.length) currentSlide = 0;
+        if (currentSlide < 0) currentSlide = carouselImages.length - 1;
+        carouselTrack.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+        var dots = carouselDots.querySelectorAll('.carousel-dot');
+        dots.forEach(function(d, i) {
+            d.classList.toggle('active', i === currentSlide);
+        });
+    }
+
+    function startAutoSlide() {
+        clearInterval(autoSlideTimer);
+        autoSlideTimer = setInterval(function() {
+            goToSlide(currentSlide + 1);
+        }, 4000);
+    }
+
+    document.getElementById('carouselPrev').addEventListener('click', function() {
+        goToSlide(currentSlide - 1);
+        startAutoSlide();
+    });
+    document.getElementById('carouselNext').addEventListener('click', function() {
+        goToSlide(currentSlide + 1);
+        startAutoSlide();
+    });
+    carouselDots.addEventListener('click', function(e) {
+        if (e.target.classList.contains('carousel-dot')) {
+            goToSlide(parseInt(e.target.getAttribute('data-index')));
+            startAutoSlide();
+        }
+    });
+    initCarousel();
+
+    var newsData = [
+        {
+            tag: '政策',
+            tagClass: 'news-tag-policy',
+            title: '国务院办公厅印发《关于发展银发经济增进老年人福祉的意见》',
+            date: '2025-01',
+            url: 'https://www.gov.cn/zhengfu/content/202401/content_6926519.htm'
+        },
+        {
+            tag: '行业',
+            tagClass: 'news-tag-industry',
+            title: '文旅部：推动康养旅游高质量发展，打造一批国家级康养基地',
+            date: '2025-03',
+            url: 'https://www.mct.gov.cn/'
+        },
+        {
+            tag: '健康',
+            tagClass: 'news-tag-health',
+            title: '国家卫健委：老龄健康促进行动持续推进，中医养生融入社区',
+            date: '2025-02',
+            url: 'https://www.nhc.gov.cn/'
+        },
+        {
+            tag: '养老',
+            tagClass: 'news-tag-aging',
+            title: '民政部：全国养老服务体系建设取得新进展，社区养老覆盖率达90%',
+            date: '2025-04',
+            url: 'https://www.mca.gov.cn/'
+        },
+        {
+            tag: '行业',
+            tagClass: 'news-tag-industry',
+            title: '2025中国康养旅游市场规模预计突破千亿，生态疗愈成新热点',
+            date: '2025-05',
+            url: 'https://www.ctaweb.org.cn/'
+        },
+        {
+            tag: '政策',
+            tagClass: 'news-tag-policy',
+            title: '十四五老龄事业规划：构建居家社区机构相协调的养老服务体系',
+            date: '2024-12',
+            url: 'https://www.gov.cn/'
+        }
+    ];
+
+    function initNews() {
+        var grid = document.getElementById('homeNewsGrid');
+        var html = '';
+        newsData.forEach(function(news) {
+            html +=
+                '<a class="home-news-card" href="' + news.url + '" target="_blank" rel="noopener noreferrer">' +
+                    '<span class="home-news-card-tag ' + news.tagClass + '">' + news.tag + '</span>' +
+                    '<div class="home-news-card-title">' + news.title + '</div>' +
+                    '<div class="home-news-card-date">' + news.date + '</div>' +
+                '</a>';
+        });
+        grid.innerHTML = html;
+    }
+    initNews();
+
+    var vCultureSlider = document.getElementById('vCultureSlider');
+    var vEcoSlider = document.getElementById('vEcoSlider');
+    var vLeisureSlider = document.getElementById('vLeisureSlider');
+    var vMedicalSlider = document.getElementById('vMedicalSlider');
+    var vCultureVal = document.getElementById('vCultureVal');
+    var vEcoVal = document.getElementById('vEcoVal');
+    var vLeisureVal = document.getElementById('vLeisureVal');
+    var vMedicalVal = document.getElementById('vMedicalVal');
+    var visualSidebarResult = document.getElementById('visualSidebarResult');
+    var currentChartType = null;
+
+    function syncSlidersFromUserVec() {
+        if (usrVec) {
+            vCultureSlider.value = usrVec[0];
+            vEcoSlider.value = usrVec[1];
+            vLeisureSlider.value = usrVec[2];
+            vMedicalSlider.value = usrVec[3];
+            vCultureVal.textContent = usrVec[0];
+            vEcoVal.textContent = usrVec[1];
+            vLeisureVal.textContent = usrVec[2];
+            vMedicalVal.textContent = usrVec[3];
+        }
+        updateVisualSidebarResult();
+    }
+
+    function updateVisualSidebarResult() {
+        var vec = [
+            parseFloat(vCultureSlider.value),
+            parseFloat(vEcoSlider.value),
+            parseFloat(vLeisureSlider.value),
+            parseFloat(vMedicalSlider.value)
+        ];
+        var sims = modeFeatures.map(function(mf) { return cosineSim(vec, mf); });
+        var maxSim = -1;
+        var maxIdx = 0;
+        sims.forEach(function(s, i) {
+            if (s > maxSim) { maxSim = s; maxIdx = i; }
+        });
+        visualSidebarResult.innerHTML =
+            '<strong>🌟 推荐模式：</strong>' + modeNames[maxIdx] + '<br>' +
+            '<strong>匹配度：</strong>' + maxSim.toFixed(4) + '<br>' +
+            sims.map(function(s, i) {
+                return modeNames[i] + '：' + s.toFixed(4);
+            }).join('<br>');
+    }
+
+    function onSliderChange() {
+        vCultureVal.textContent = parseFloat(vCultureSlider.value).toFixed(1);
+        vEcoVal.textContent = parseFloat(vEcoSlider.value).toFixed(1);
+        vLeisureVal.textContent = parseFloat(vLeisureSlider.value).toFixed(1);
+        vMedicalVal.textContent = parseFloat(vMedicalSlider.value).toFixed(1);
+        updateVisualSidebarResult();
+
+        var vec = [
+            parseFloat(vCultureSlider.value),
+            parseFloat(vEcoSlider.value),
+            parseFloat(vLeisureSlider.value),
+            parseFloat(vMedicalSlider.value)
+        ];
+        usrVec = vec;
+        var sims = modeFeatures.map(function(mf) { return cosineSim(vec, mf); });
+        var maxSim = -1;
+        var maxIdx = 0;
+        sims.forEach(function(s, i) {
+            if (s > maxSim) { maxSim = s; maxIdx = i; }
+        });
+        bestIdx = maxIdx;
+        simScores = sims;
+
+        if (currentChartType && chartDisplayArea.style.display !== 'none') {
+            renderChart(currentChartType);
+        }
+    }
+
+    vCultureSlider.addEventListener('input', onSliderChange);
+    vEcoSlider.addEventListener('input', onSliderChange);
+    vLeisureSlider.addEventListener('input', onSliderChange);
+    vMedicalSlider.addEventListener('input', onSliderChange);
+
+    var origRenderChart = renderChart;
+    renderChart = function(chartType) {
+        currentChartType = chartType;
+        origRenderChart(chartType);
+    };
+
+    var origResetToChartSelection = resetToChartSelection;
+    resetToChartSelection = function() {
+        currentChartType = null;
+        origResetToChartSelection();
+    };
+
+    var origShowPage = showPage;
+    showPage = function(pageId) {
+        origShowPage(pageId);
+        if (pageId === 'visualPage' && usrVec) {
+            syncSlidersFromUserVec();
+        }
+    };
+
+    var origRenderPriceTiers = renderPriceTiers;
+    renderPriceTiers = function(tiers) {
+        var html = '<div class="price-tiers">';
+        tiers.forEach(function(t) {
+            html +=
+                '<div class="tier-card">' +
+                  '<div class="tier-tooltip">💬 可以问我了解详情哦！</div>' +
+                  '<span class="tier-label ' + t.tierClass + '">' + t.label + '</span>' +
+                  '<div class="tier-price">💰 ' + t.price + '</div>' +
+                  '<div class="tier-detail">' + t.detail + '</div>' +
+                '</div>';
+        });
+        html += '</div>';
+        return html;
+    };
+
 })();
