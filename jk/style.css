@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿/* 基础样式重置 */
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿/* 基础样式重置 */
 * {
     margin: 0;
     padding: 0;
@@ -590,11 +590,11 @@ body {
     transition: opacity 0.25s ease;
 }
 
-.visual-slider-group {
+.slider-g {
     margin-bottom: 14px;
 }
 
-.visual-slider-group label {
+.slider-g label {
     display: block;
     font-size: 0.85rem;
     color: #3a5535;
@@ -602,13 +602,13 @@ body {
     font-weight: 600;
 }
 
-.visual-slider-group label span {
+.slider-g label span {
     color: #4a8b4a;
     font-weight: 700;
     font-size: 0.95rem;
 }
 
-.visual-slider {
+.range-slider {
     -webkit-appearance: none;
     appearance: none;
     width: 100%;
