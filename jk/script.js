@@ -945,7 +945,7 @@
     function callDeepSeekAPI(userMessage) {
         if (!deepseekApiKey) {
             chatHistory.pop();
-            return Promise.resolve('⚠️ 请先在顶部输入并保存 DeepSeek API Key 才能使用AI助手。\n\n点击 AI助手 面板顶部的输入框，粘贴您的 API Key 后点击"保存"即可。');
+            return Promise.resolve('🤖 小旅暂时无法回答复杂问题，请先配置 DeepSeek API Key。<br><br>👉 <a href="https://platform.deepseek.com/api_keys" target="_blank" style="color:#4a7a4a;font-weight:bold;">点击此处获取 API Key</a><br><br>获取后粘贴到顶部输入框，点击"保存"即可。');
         }
         chatHistory.push({ role: 'user', content: userMessage });
 
