@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.5">
-    <title>健康养生旅游模式可视化选择 · 石家庄铁道大学</title>
+    <title>健康养生旅游模式可视化选择</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js"></script>
@@ -40,6 +40,11 @@
         <div class="ai-chat-header">
             小旅 - 康旅AI小助手
             <button class="ai-chat-close" id="aiChatClose">x</button>
+        </div>
+        <!-- API Key 设置区域 -->
+        <div class="ai-api-key-area" id="aiApiKeyArea">
+            <input type="password" id="aiApiKeyInput" placeholder="输入 DeepSeek API Key">
+            <button id="aiSaveApiKeyBtn">保存</button>
         </div>
         <!-- 快捷按钮区域 -->
         <div class="ai-quick-btns" id="aiQuickBtns">
@@ -78,8 +83,7 @@
             <div class="sidebar-header">
                 <div class="sidebar-logo">&#x1F33F;</div>
                 <div class="sidebar-brand">康养旅游系统</div>
-                <div class="sidebar-sub">石家庄铁道大学</div>
-            </div>
+                </div>
             <!-- 导航菜单 -->
             <nav class="sidebar-nav">
                 <div class="nav-section-title">功能导航</div>

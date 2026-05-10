@@ -1,4 +1,4 @@
-﻿﻿/* 基础样式重置 */
+﻿/* 基础样式重置 */
 * {
     margin: 0;
     padding: 0;
@@ -1355,6 +1355,42 @@ body {
 
 .ai-chat-close:hover {
     background: rgba(255, 255, 255, 0.25);
+}
+
+.ai-api-key-area {
+    display: flex;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #f8f8f0;
+    border-bottom: 1px solid #e8e8e0;
+}
+
+.ai-api-key-area input {
+    flex: 1;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #d8d8d0;
+    font-size: 0.8rem;
+    outline: none;
+    background: #fff;
+}
+
+.ai-api-key-area input:focus {
+    border-color: #8cc97a;
+}
+
+.ai-api-key-area button {
+    padding: 6px 12px;
+    background: #4a7a4a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.ai-api-key-area button:hover {
+    background: #3a6a3a;
 }
 
 .ai-chat-body {

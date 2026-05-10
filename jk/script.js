@@ -1,4 +1,4 @@
-﻿﻿(function() {
+(function() {
 
     // 四种康养模式
     var modeNames = ["文化+健康养生", "生态+健康养生", "休闲+健康养生", "医疗+健康养生"];
@@ -100,7 +100,7 @@
     var simScores = null;
     var navStack = [];
 
-    var deepseekApiKey = 'sk-8ab028cdb27f44a38b712422179e63ba';
+    var deepseekApiKey = localStorage.getItem('deepseekApiKey') || '';
     var deepseekApiUrl = 'https://api.deepseek.com/chat/completions';
     var chatHistory = [];
     var isAiLoading = false;
@@ -114,7 +114,7 @@
                 '适合人群：' + modeDetail[bestIdx].who + '。推荐理由：' + modeDetail[bestIdx].reason +
                 '。' + modeDetail[bestIdx].activities;
         }
-        return '你是"小旅"，一个友好、专业的康养旅游智能助手，服务于"健康养生旅游模式可视化选择系统"（石家庄铁道大学开发）。' +
+        return '你是"小旅"，一个友好、专业的康养旅游智能助手，服务于"健康养生旅游模式可视化选择系统"。' +
             '你的职责是帮助用户了解康养旅游模式、使用平台功能、解答相关问题。' +
             '请用简洁、亲切的中文回复，适当使用emoji增加亲和力。' +
             '\n\n【系统功能】' +
@@ -167,6 +167,8 @@
     var aiSpeakLastBtn = document.getElementById('aiSpeakLastBtn');
     var aiBubble = document.getElementById('aiBubble');
     var aiQuickBtns = document.getElementById('aiQuickBtns');
+    var aiApiKeyInput = document.getElementById('aiApiKeyInput');
+    var aiSaveApiKeyBtn = document.getElementById('aiSaveApiKeyBtn');
     let lastAiMsg = '';
     let speaking = false;
     let voiceList = [];
@@ -505,7 +507,7 @@
         }
 
         children.push(new Paragraph({
-            children: [new TextRun({ text: '由石家庄铁道大学 · 健康养生旅游模式系统生成', size: 20, color: '888888', font: 'SimSun' })],
+            children: [new TextRun({ text: '由健康养生旅游模式系统生成', size: 20, color: '888888', font: 'SimSun' })],
             alignment: AlignmentType.CENTER,
             border: { top: { style: BorderStyle.SINGLE, size: 1, color: 'CCCCCC', space: 10 } },
             spacing: { before: 300 },
@@ -941,6 +943,10 @@
     // 调用DeepSeek API进行智能对话
     // 将用户消息和历史对话发送给DeepSeek模型，返回AI回复
     function callDeepSeekAPI(userMessage) {
+        if (!deepseekApiKey) {
+            chatHistory.pop();
+            return Promise.resolve('⚠️ 请先在顶部输入并保存 DeepSeek API Key 才能使用AI助手。\n\n点击 AI助手 面板顶部的输入框，粘贴您的 API Key 后点击"保存"即可。');
+        }
         chatHistory.push({ role: 'user', content: userMessage });
 
         var messages = [{ role: 'system', content: buildSystemPrompt() }];
@@ -1153,6 +1159,18 @@
         if (e.target.classList.contains('ai-quick-btn')) {
             var q = e.target.getAttribute('data-q');
             handleAIQuery(q);
+        }
+    });
+
+    aiSaveApiKeyBtn.addEventListener('click', function() {
+        var key = aiApiKeyInput.value.trim();
+        if (key) {
+            localStorage.setItem('deepseekApiKey', key);
+            deepseekApiKey = key;
+            addChatMessage('assistant', '✅ API Key 已保存，下次对话将使用新配置。');
+            aiApiKeyInput.value = '';
+        } else {
+            addChatMessage('assistant', '⚠️ 请输入有效的 API Key。');
         }
     });
 
